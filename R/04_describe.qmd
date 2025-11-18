@@ -3,3 +3,20 @@ title: "04_describe"
 format: html
 ---
 
+# Describe the data
+
+## load data
+
+```{r}
+#| message: false
+#| warning: false
+aug_expression <- read_csv("../data/03_expression_augment_data.csv")
+```
+
+```{r}
+view(aug_expression)
+```
+
+```{r}
+read_csv("../data/03_expression_augment_data.tsv") 
+```

@@ -13,5 +13,5 @@ ri_expression_data |>
   select(X,expression,sample) |> 
   pivot_wider(names_from = sample,
               values_from = expression) |> 
-  write_tsv("../data/03_expression_augment_data.tsv")
+  write_csv("../data/03_expression_augment_data.csv")
 ```

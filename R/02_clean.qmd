@@ -15,8 +15,8 @@ library(tidyverse)
 ```
 
 ```{r}
-ri_expression_data  |> 
-  write_tsv("../data/02_data_clean.tsv")
+ri_expression_data |> 
+  write_csv("../data/02_data_clean.csv")
   
 
 ```
