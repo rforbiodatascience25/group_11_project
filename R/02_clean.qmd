@@ -25,6 +25,18 @@ ri_expression_data |>
   pivot_wider(names_from = sample,
               values_from = expression) |> 
   write_tsv("../data/02_data_clean.tsv")
-  
+
+
+```
+
+## Clean fermentation data
+
+```{r}
+
+ri_fermentation_data |>
+  filter(Exp == "RI_batch_WC1") |>
+  select( "Rowname" | (starts_with("T") & ends_with("h")) ) |>
+  select(where(~!all(is.na(.x)) ) ) |>
+  write_tsv("../data/02_fermentation_data_clean.csv")
 
 ```
