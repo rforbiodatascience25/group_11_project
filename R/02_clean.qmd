@@ -16,6 +16,7 @@ library(tidyverse)
 
 ```{r}
 ri_expression_data |> 
+<<<<<<< HEAD
   pivot_longer(cols = -X,
                names_to = "sample",
                values_to = "expression") |> 
@@ -38,5 +39,9 @@ ri_fermentation_data |>
   select( "Rowname" | (starts_with("T") & ends_with("h")) ) |>
   select(where(~!all(is.na(.x)) ) ) |>
   write_tsv("../data/02_fermentation_data_clean.csv")
+=======
+  write_csv("../data/02_data_clean.csv")
+  
+>>>>>>> c36f4152a5b4c3a4a06f439975899dbc77a4023a
 
 ```
