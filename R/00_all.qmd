@@ -3,3 +3,12 @@ title: "00_all"
 format: html
 ---
 
+# Run all R documents
+
+```{r}
+source("01_load.qmd")
+source("02_clean.qmd")
+source("03_augment.qmd")
+source("04_describe.qmd")
+source("05_analyse_1.qmd")
+```
