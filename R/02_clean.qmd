@@ -3,3 +3,28 @@ title: "02_clean"
 format: html
 ---
 
+# clean data
+
+## join expression and meta data
+
+```{r}
+library(tidyverse)
+
+  
+  
+```
+
+```{r}
+ri_expression_data |> 
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  inner_join(ri_metadata, by = c("sample" = "GC.code" )) |> 
+  filter(Exp == "RI_batch_WC") |> 
+  select(X,expression,sample) |> 
+  pivot_wider(names_from = sample,
+              values_from = expression) |> 
+  write_tsv("../data/02_data_clean.tsv")
+  
+
+```
