@@ -1,0 +1,140 @@
+---
+title: "05_analyse_03"
+format: html
+editor: visual
+---
+```{R}
+library("tidyverse")
+library("ggplot2")
+
+subset_plots_1 <- c(139, 140, 141, 274, 275)
+subset_plots_2 <- c(142, 143, 144, 276, 277)
+subset_cols <- c("T0h", "T4h", "T8h", "T12h", "T16h", "T24h", "T28h", "T32h", "T48h", "T60h", "T72h", "T96h", "T120h")
+subset_1 <- ri_fermentation_data[subset_plots_1, subset_cols, drop=FALSE]
+subset_2 <- ri_fermentation_data[subset_plots_2, subset_cols, drop=FALSE]
+
+summary_1 <- subset_1 |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_2 <- subset_2 |> summarise(across(everything(), list(mean = mean, sd = sd)))
+
+df_1 <- summary_1 |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "Total_count"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = Total_count, values_from = value) |> 
+  mutate(group = "Total_count")
+
+df_2 <- summary_2 |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "Active_count"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = Active_count, values_from = value) |> 
+  mutate(group = "Active_count")
+
+plot_df <- bind_rows(df_1, df_2) |> 
+  mutate(Hours = factor(Hours, levels = unique(Hours)))
+
+ggplot(plot_df, aes(x = Hours, y = mean, group = group, linetype = group, color = group))+
+  geom_line(linewidth = 1)+
+  geom_point()+
+  geom_errorbar(aes(ymin = mean-sd, ymax = mean+sd), width = 0.2)+
+  scale_color_manual(values = c("Total_count" = "#FC8D62", "Active_count" = "#66C2A5"))+
+  scale_linetype_manual(values = c("Total_count" = "solid", "Active_count" = "dashed"))+
+  labs(title = "Mean Growth Curve for RI", x = "Hours", y = "Cell count", 
+       color = "Group", linetype = "Group")+
+  theme_minimal()
+```
+
+```{R}
+library("tidyverse")
+library("ggplot2")
+
+glucose_rows <- c(145, 146, 147, 278, 279)
+pyruvate_rows <- c(151, 152, 153, 282, 283)
+lactate_rows <- c(154, 155, 156, 284, 285)
+formate_rows <- c(157, 158, 159, 286, 287)
+acetate_rows <- c(160, 161, 162, 288, 289)
+butyrate_rows <- c(163, 164, 165, 290, 291)
+ph_rows <- c(136, 137, 138, 272, 273)
+subset_cols <- c("T0h", "T4h", "T8h", "T12h", "T16h", "T24h", "T28h", "T32h", "T48h", "T60h", "T72h", "T96h", "T120h")
+
+subset_glucose <- ri_fermentation_data[glucose_rows, subset_cols, drop=FALSE]
+subset_pyruvate <- ri_fermentation_data[pyruvate_rows, subset_cols, drop=FALSE]
+subset_lactate <- ri_fermentation_data[lactate_rows, subset_cols, drop=FALSE]
+subset_formate <- ri_fermentation_data[formate_rows, subset_cols, drop=FALSE]
+subset_acetate <- ri_fermentation_data[acetate_rows, subset_cols, drop=FALSE]
+subset_butyrate <- ri_fermentation_data[butyrate_rows, subset_cols, drop=FALSE]
+subset_ph <- ri_fermentation_data[ph_rows, subset_cols, drop=FALSE]
+
+summary_glucose <- subset_glucose |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_pyruvate <- subset_pyruvate |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_lactate <- subset_lactate |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_formate <- subset_formate |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_acetate <- subset_acetate |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_butyrate <- subset_butyrate |> summarise(across(everything(), list(mean = mean, sd = sd)))
+summary_ph <- subset_ph |> summarise(across(everything(), list(mean = mean, sd = sd)))
+
+df_glucose <- summary_glucose |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "glu_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = glu_mm, values_from = value) |> 
+  mutate(group = "glu_mm")
+
+df_pyruvate <- summary_pyruvate |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "pyr_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = pyr_mm, values_from = value) |> 
+  mutate(group = "pyr_mm")
+
+df_lactate <- summary_lactate |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "lac_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = lac_mm, values_from = value) |> 
+  mutate(group = "lac_mm")
+
+df_formate <- summary_formate |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "for_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = for_mm, values_from = value) |> 
+  mutate(group = "for_mm")
+
+df_acetate <- summary_acetate |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "ace_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = ace_mm, values_from = value) |> 
+  mutate(group = "ace_mm")
+
+df_butyrate <- summary_butyrate |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "but_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = but_mm, values_from = value) |> 
+  mutate(group = "but_mm")
+
+df_ph <- summary_ph |> pivot_longer(cols = everything(),
+                                  names_to = c("Hours", "ph_mm"),
+                                  names_sep = "_",
+                                  values_to = "value") |> 
+  pivot_wider(names_from = ph_mm, values_from = value) |> 
+  mutate(group = "ph_mm")
+
+plot_mm_df <- bind_rows(df_glucose, df_pyruvate, df_lactate, df_formate, df_acetate, df_butyrate, df_ph) |> 
+  mutate(Hours = factor(Hours, levels = unique(Hours)))
+
+ggplot(plot_mm_df, aes(x = Hours, y = mean, group = group, linetype = group, color = group))+
+  geom_line()+
+  geom_point()+
+  scale_y_continuous(
+    name = "Concentration (mM)",
+    limits = c(0,12),
+    sec.axis = sec_axis(~ ., name = "pH", breaks = seq(5,7,0.5))
+  )+
+  labs(title = "Mean Growth Curve for RI", x = "Hours", y = "mM", 
+       color = "Group", linetype = "Group")+
+  theme_minimal()
+#Still needs some work, maybe scale the right axis, maybe not include it at all, although if we do scale it it would look prettier
+```
