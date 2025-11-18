@@ -1,0 +1,108 @@
+---
+title: "06_analyse_2"
+format: html
+---
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(ggplot2)
+library(factoextra)
+library(cluster)
+
+aug_exp <- read_csv("../data/03_expression_augment_data.csv")
+
+```
+
+## 
+
+```{r}
+
+corr_matrix <- aug_exp |> 
+  #slice_head(n = 20) |> 
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  pivot_wider(names_from = X,
+              values_from = expression) |> 
+  column_to_rownames(var = "sample") |> 
+  cor()
+
+```
+
+```{r}
+
+corr_matrix[is.na(corr_matrix)] <- 0
+
+kmeans.re <- kmeans(corr_matrix, centers = 3, nstart = 20)
+
+```
+
+```{r}
+
+fviz_cluster(
+  kmeans.re,
+  data = corr_matrix,
+  labelsize = 0
+)
+
+```
+
+```{r}
+
+clusters_df <- data.frame(
+  gene_ids = rownames(corr_matrix),
+  cluster = kmeans.re$cluster,
+  row.names = NULL
+)
+
+```
+
+```{r}
+
+ri_annotation_filtered <- ri_annotation |>
+  select(gene_ids, ko) |>
+  mutate(ko = ifelse(ko == "-", NA, ko)) |>
+  drop_na(ko) |>
+  separate_rows(ko, sep = ",")
+  #filter(!is.na(ko), ko != "")
+
+
+cluster_kos <- clusters_df |>
+  left_join(ri_annotation_filtered, by = "gene_ids") |>
+  drop_na(ko)
+
+
+ko_cluster_stats <- cluster_kos |>
+  group_by(cluster, ko) |>
+  summarise(n = n(), .groups = "drop") |>
+  group_by(cluster) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  arrange(cluster, desc(percent))
+
+
+
+top_x <- 10
+
+top_kos <- ko_cluster_stats |>
+  group_by(cluster) |>
+  slice_max(percent, n = top_x) |>
+  ungroup()
+
+# Create a cluster-specific order for KO terms
+top_kos2 <- top_kos |>
+  group_by(cluster) |>
+  arrange(percent) |>
+  mutate(ko_order = factor(ko, levels = unique(ko))) |> 
+  ungroup()
+
+ggplot(top_kos2, aes(x = ko_order, y = percent, fill = as.factor(cluster))) +
+  geom_col() +
+  facet_wrap(~ cluster, scales = "free_y") +
+  labs(x = "KEGG KO", y = "Percentage", title = "Top KO codes per Cluster") +
+  coord_flip() +
+  theme_bw()
+
+
+```
