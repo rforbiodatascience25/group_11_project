@@ -13,10 +13,5 @@ format: html
 aug_expression <- read_csv("../data/03_expression_augment_data.csv")
 ```
 
-```{r}
-view(aug_expression)
-```
-
-```{r}
-read_csv("../data/03_expression_augment_data.tsv") 
-```
+The expression dataset consists of \`{r} ncol(aug_expression) -1\` samples, each analysing\
+\
