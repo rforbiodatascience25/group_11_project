@@ -3,3 +3,15 @@ title: "03_augment"
 format: html
 ---
 
+```{r}
+ri_expression_data |> 
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  inner_join(ri_metadata, by = c("sample" = "GC.code" )) |> 
+  filter(Exp == "RI_batch_WC") |> 
+  select(X,expression,sample) |> 
+  pivot_wider(names_from = sample,
+              values_from = expression) |> 
+  write_tsv("../data/03_augment_data.tsv")
+```
