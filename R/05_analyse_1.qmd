@@ -46,54 +46,19 @@ aug_exp |>
 
 ```
 
-```{r}
-#| warning: false
-library("DESeq2")
-```
-
-```{r}
-
-library(tidyr)
-library(dplyr)
-
-ri_metadata_2 = ri_metadata |>
-  rename(id = "GC.code")
 
 
-count_data_wide <- read_csv("../data/03_expression_augment_data.csv")
-
-count_data_long <- count_data_wide %>%
-  pivot_longer(
-    cols = -X,        
-    names_to = "column",
-    values_to = "value"     
-  ) %>%
-  rename(row = X)
-
-samples <- unique(count_data_long$column)
-ri_metadata_filtered <- ri_metadata[ri_metadata$GC.code %in% samples, ]
-rownames(ri_metadata_filtered) <- ri_metadata_filtered$GC.code
-setdiff(samples, rownames(ri_metadata_filtered))
-
-
-dds <- DESeqDataSetFromMatrix(countData=count_data_long, 
-                              colData=ri_metadata_filtered, 
-                              design=~Time, tidy = TRUE)
-```
 
 ```{r}
 library(tidyr)
 library(dplyr)
 library(DESeq2)
 
-# 1. Prepare metadata
 ri_metadata_2 <- ri_metadata |>
-  rename(id = "GC.code")
+  dplyr::rename(id = "GC.code")
 
-# 2. Read and prepare count data (keep it in WIDE format)
 count_data_wide <- read_csv("../data/03_expression_augment_data.csv")
 
-# Convert to matrix with proper row names
 count_matrix <- as.matrix(count_data_wide[,-1])  # Remove first column (assuming it's gene names)
 storage.mode(count_matrix) <- "integer"
 rownames(count_matrix) <- count_data_wide$X      # Set row names from first column
@@ -146,19 +111,64 @@ head(res)
 ```
 
 ```{r}
-library(ggrepel)
-res |> 
-  ggplot(aes(x = log2FoldChange, y = -log10(pvalue))) +
-  geom_point(aes(), alpha = 0.5)+  # color = is_significant
-  geom_text_repel(data = res,
-            aes(x = log2FoldChange,
-                y = pvalue, label = rownames(res)),
-            size = 3,
-            color = "cadetblue"
-            )+
-  labs(x = "log2FoldChange",
-       y = "-log10(p)",
-       title = "fix",
-       subtitle = "fux")+
-  theme(legend.position = "none")
+library(EnhancedVolcano)
+EnhancedVolcano(res,
+  lab = rownames(res),
+  x = 'log2FoldChange',
+  y = 'pvalue',
+  pCutoff = 10e-4,
+  FCcutoff = 1.333,
+  xlim = c(-5.5, 5.5),
+  ylim = c(0, -log10(10e-12)),
+  pointSize = 1.5,
+  labSize = 2.5,
+  title = 'DESeq2 results',
+  subtitle = 'Differential expression',
+  caption = 'FC cutoff, 1.333; p-value cutoff, 10e-4',
+  legendPosition = "right",
+  legendLabSize = 14,
+  col = c('grey30', 'forestgreen', 'royalblue', 'red2'),
+  colAlpha = 0.9,
+  drawConnectors = TRUE,
+  hline = c(10e-8),
+  widthConnectors = 0.5)
 ```
+
+```{r}
+# Load required libraries
+library(DESeq2)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+res12 <- results(dds, contrast=c("Time","12","4"))
+res48 <- results(dds, contrast=c("Time","48","4"))
+
+res12 <- res12[order(res12$padj), ]
+res48 <- res48[order(res48$padj), ]
+
+top_genes <- rownames(res12)[1:6]
+
+norm_counts <- counts(dds, normalized=TRUE)
+top_counts <- norm_counts[top_genes, ]
+
+top_counts_df <- as.data.frame(top_counts) %>%
+  rownames_to_column(var="Gene") %>%
+  pivot_longer(-Gene, names_to="Sample", values_to="Expression")
+
+sample_info <- as.data.frame(colData(dds)) %>%
+  select(Time) %>%
+  rownames_to_column(var="Sample")
+
+top_counts_df <- top_counts_df %>%
+  left_join(sample_info, by="Sample")
+
+ggplot(top_counts_df, aes(x=Time, y=Expression, fill=Time)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~Gene, scales="free_y") +
+  theme_minimal() +
+  labs(title="Top 6 Differentially Expressed Genes Across Time Points",
+       y="Normalized Expression")
+
+```
+
