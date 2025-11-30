@@ -46,6 +46,7 @@ fviz_cluster(
   data = corr_matrix,
   labelsize = 0
 )
+ggsave("../results/clusters.png")
 
 ```
 
@@ -104,5 +105,6 @@ ggplot(top_kos2, aes(x = ko_order, y = percent, fill = as.factor(cluster))) +
   coord_flip() +
   theme_bw()
 
+ggsave("../results/topKOcodes.png")
 
 ```

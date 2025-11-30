@@ -6,7 +6,7 @@ format:
 editor: visual
 ---
 
-## slide 1
+## Introduction to subject
 
 Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
 
@@ -19,17 +19,13 @@ link to how to implement different things:
 
 <https://quarto.org/docs/presentations/revealjs/>
 
-**code**
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-## slide 2
+## Workflow
 
 ```{r}
 2+2
 
 ```
+
+## analysis results: co-expression
+
+![](results/CoExpression.png)
