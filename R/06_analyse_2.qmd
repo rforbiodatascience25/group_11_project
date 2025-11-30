@@ -10,12 +10,61 @@ library(tidyverse)
 library(ggplot2)
 library(factoextra)
 library(cluster)
+library(KEGGREST)
 
 aug_exp <- read_csv("../data/03_expression_augment_data.csv")
 
 ```
 
-## 
+```{r}
+
+corr_matrix_4 <- aug_exp |>
+  select(X, GC124670, GC124671, GC124672) |>
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  pivot_wider(names_from = X,
+              values_from = expression) |> 
+  column_to_rownames(var = "sample") |> 
+  cor()
+
+corr_matrix_4[is.na(corr_matrix_4)] <- 0
+
+kmeans_4.re <- kmeans(corr_matrix_4, centers = 3, nstart = 20)
+
+
+
+corr_matrix_12 <- aug_exp |>
+  select(X, GC124673, GC124674, GC124675) |>
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  pivot_wider(names_from = X,
+              values_from = expression) |> 
+  column_to_rownames(var = "sample") |> 
+  cor()
+
+corr_matrix_12[is.na(corr_matrix_12)] <- 0
+
+kmeans_12.re <- kmeans(corr_matrix, centers = 3, nstart = 20)
+
+
+
+corr_matrix_48 <- aug_exp |>
+  select(X, GC124676, GC124677, GC124678) |>
+  pivot_longer(cols = -X,
+               names_to = "sample",
+               values_to = "expression") |> 
+  pivot_wider(names_from = X,
+              values_from = expression) |> 
+  column_to_rownames(var = "sample") |> 
+  cor()
+
+corr_matrix_48[is.na(corr_matrix_48)] <- 0
+
+kmeans_48.re <- kmeans(corr_matrix_48, centers = 3, nstart = 20)
+
+```
 
 ```{r}
 
@@ -42,8 +91,24 @@ kmeans.re <- kmeans(corr_matrix, centers = 3, nstart = 20)
 ```{r}
 
 fviz_cluster(
-  kmeans.re,
-  data = corr_matrix,
+  kmeans_4.re,
+  data = corr_matrix_4,
+  labelsize = 0
+)
+
+
+
+fviz_cluster(
+  kmeans_12.re,
+  data = corr_matrix_12,
+  labelsize = 0
+)
+
+
+
+fviz_cluster(
+  kmeans_48.re,
+  data = corr_matrix_48,
   labelsize = 0
 )
 
@@ -57,52 +122,162 @@ clusters_df <- data.frame(
   row.names = NULL
 )
 
-```
-
-```{r}
-
 ri_annotation_filtered <- ri_annotation |>
   select(gene_ids, ko) |>
   mutate(ko = ifelse(ko == "-", NA, ko)) |>
   drop_na(ko) |>
   separate_rows(ko, sep = ",")
-  #filter(!is.na(ko), ko != "")
 
 
 cluster_kos <- clusters_df |>
   left_join(ri_annotation_filtered, by = "gene_ids") |>
   drop_na(ko)
 
+```
 
-ko_cluster_stats <- cluster_kos |>
-  group_by(cluster, ko) |>
-  summarise(n = n(), .groups = "drop") |>
-  group_by(cluster) |>
-  mutate(percent = 100 * n / sum(n)) |>
-  arrange(cluster, desc(percent))
+```{r}
+
+unique_ko_ids <- unique(gsub("ko:", "", ri_annotation_filtered$ko))
+
+ko_to_pathway_list <- list()
+# Wait 0.5 seconds between requests
+request_delay_seconds <- 0.5
+
+for (ko_id in unique_ko_ids) {
+    Sys.sleep(request_delay_seconds) 
+    
+    pathways <- tryCatch({
+        keggLink("pathway", ko_id)
+    }, error = function(e) {
+        message(paste("Error for KO:", ko_id, " - ", e$message))
+        return(NULL)
+    })
+    
+    if (!is.null(pathways) && length(pathways) > 0) {
+        ko_to_pathway_list[[ko_id]] <- pathways
+    }
+}
+
+# Convert the list to a data frame
+ko_pathway_df <- 
+    bind_rows(lapply(names(ko_to_pathway_list), function(ko_id) {
+        data.frame(
+            ko = paste0("ko:", ko_id), # Add the 'ko:' prefix back for merging
+            pathway_id = names(ko_to_pathway_list[[ko_id]]),
+            pathway_name_raw = ko_to_pathway_list[[ko_id]] # This is the pathway name
+        )
+    })) %>%
+    # Clean up the pathway ID and name
+    mutate(
+        pathway_id = gsub("path:", "", pathway_id),
+        # Remove the organism code (e.g., 'hsa00010' -> '00010')
+        pathway_id_cleaned = sub("...0*", "", pathway_id) 
+    )
+
+df_with_pathways_4 <- cluster_kos %>%
+    dplyr::left_join(ko_pathway_df, by = "ko")
 
 
 
-top_x <- 10
+```
 
-top_kos <- ko_cluster_stats |>
-  group_by(cluster) |>
-  slice_max(percent, n = top_x) |>
-  ungroup()
+```{r}
+# 1. Count the number of genes (rows) in each cluster
+cluster_counts <- df_with_pathways %>%
+    group_by(cluster) %>%
+    summarise(total_genes_in_cluster = n_distinct(gene_ids))
 
-# Create a cluster-specific order for KO terms
-top_kos2 <- top_kos |>
-  group_by(cluster) |>
-  arrange(percent) |>
-  mutate(ko_order = factor(ko, levels = unique(ko))) |> 
-  ungroup()
+# 2. Count how many genes from each cluster are in each pathway
+pathway_counts <- df_with_pathways %>%
+    # Filter out entries where no pathway was found (if any)
+    filter(!is.na(pathway_id)) %>%
+    # Count unique gene_ids per cluster and pathway
+    group_by(cluster, pathway_name_raw) %>%
+    summarise(genes_in_pathway = n_distinct(gene_ids), .groups = 'drop')
 
-ggplot(top_kos2, aes(x = ko_order, y = percent, fill = as.factor(cluster))) +
-  geom_col() +
-  facet_wrap(~ cluster, scales = "free_y") +
-  labs(x = "KEGG KO", y = "Percentage", title = "Top KO codes per Cluster") +
-  coord_flip() +
-  theme_bw()
+# 3. Join the counts and calculate the percentage
+pathway_percentages <- pathway_counts %>%
+    left_join(cluster_counts, by = "cluster") %>%
+    mutate(
+        percentage = (genes_in_pathway / total_genes_in_cluster) * 100
+    ) %>%
+    # Optional: Sort by cluster and percentage for easy viewing
+    arrange(cluster, desc(percentage))
 
 
+pathway_percentages_filtered <- pathway_percentages %>%
+    # Filter to keep only the entries starting with 'path:ko' 
+    # (or any entry that doesn't start with 'path:map' if we're being cautious)
+    filter(grepl("^path:ko", pathway_name_raw)) %>%
+    
+    # Optional: Rename the column for clarity in the plot
+    rename(pathway_id = pathway_name_raw)
+```
+
+```{r}
+
+top_pathways_per_cluster <- pathway_percentages_filtered %>%
+    # Group by cluster
+    group_by(cluster) %>%
+    # Sort the pathways within each cluster by percentage
+    arrange(desc(percentage)) %>%
+    # Take the top 4 rows (pathways) from each cluster
+    slice_head(n = 4) %>%
+    ungroup() %>%
+    # Convert cluster to a factor for better plotting
+    mutate(cluster = as.factor(cluster))
+
+# 3. Create the bar plot
+# We use reorder_within and scale_x_reordered to ensure the pathways
+# are sorted correctly within each cluster panel (facet).
+plot_top_4 <- top_pathways_per_cluster %>%
+    mutate(
+        # Convert pathway_id to a factor ordered by percentage for plotting
+        pathway_id = factor(pathway_id),
+        # Reorder pathway names within each cluster for correct sorting
+        pathway_name_reordered = reorder(pathway_id, percentage)
+    ) %>%
+    ggplot(aes(x = pathway_name_reordered, y = percentage, fill = pathway_id)) +
+    
+    # Create the bars
+    geom_col(show.legend = FALSE, width = 0.8, color = "white") +
+    
+    # Add the percentage labels on top of the bars
+    #geom_text(aes(label = sprintf("%.1f%%", percentage)), 
+    #          vjust = -0.5, size = 3.5, color = "black") +
+    
+    # Use facets to separate the clusters
+    facet_wrap(~ cluster, scales = "free_x", nrow = 1) +
+    
+    # Coordinate flip to make long pathway names readable
+    coord_flip() +
+    
+    # Customize titles and labels
+    labs(
+        title = "Top KEGG Pathway Enrichments by Cluster",
+        subtitle = "Percentage of Unique Genes in Each Cluster Associated with the Pathway",
+        x = "KEGG Pathway Name",
+        y = "Percentage of Genes in Cluster (%)"
+    ) +
+    
+    # Apply a clean theme and specific styling
+    theme_minimal() +
+    theme(
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(size = 11, color = "gray30"),
+        # Adjust spacing between facets
+        panel.spacing = unit(1, "lines"), 
+        # Remove the pathway name on the x-axis (since we flipped the coordinates)
+        axis.title.y = element_blank(),
+        # Use slightly darker gray for the background lines
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_line(color = "gray85"),
+        panel.grid.minor.x = element_blank(),
+        strip.text = element_text(face = "bold", size = 12) # Cluster labels
+    ) +
+    # Set a more visually distinct color palette (e.g., Viridis)
+    scale_fill_viridis_d()
+
+# 4. Display the plot (in an interactive environment, this step is needed)
+print(plot_top_4)
 ```
