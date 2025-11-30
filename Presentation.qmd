@@ -8,16 +8,11 @@ editor: visual
 
 ## Introduction to subject
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+R. intestinalis survives post-glucose (and post-mucin-degradation products) depletion by entering a slow-growth mode.
 
-When you click the **Render** button a document will be generated that includes:
+A combination of targeted metabolomics and RNA-seq showed that the slow growth mode of R. intestinalis represents a diauxic shift towards acetate and lactate consumption (both leading to butyrate production).
 
--   Content authored with markdown
--   Output from executable code
-
-link to how to implement different things:
-
-<https://quarto.org/docs/presentations/revealjs/>
+R. intestinalis consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
 
 ## Workflow/data source
 
@@ -32,11 +27,10 @@ link to how to implement different things:
 
 ::: columns
 ::: column
-Here is the accompanying text for the co-expression analysis.  
 
-- Interpretation
-- Observations
-- Summary
+- Input data was a total of 9 samples across 3 time conditions (with 3 replicates each)
+- Matrix reveals co-expression patterns in R. Intestinalis gene expression data
+- Co-regulated genes can potentially contribute to the same pathways
 :::
 
 ::: column
@@ -44,15 +38,14 @@ Here is the accompanying text for the co-expression analysis.
 :::
 :::
 
-## clusters
+## analysis results: clustering
 
 ::: columns
 ::: column
-Here is the accompanying text for the clusters analysis.  
 
-- Interpretation
-- Observations
-- Summary
+- K-means clustering was applied to the correlation matrix from the previous slide
+- There is a clear separation of genes in the 2D space
+- Genes are grouped into 3 clusters (arbitrary cutoff for regulation validation)
 :::
 
 ::: column
@@ -64,11 +57,10 @@ Here is the accompanying text for the clusters analysis.
 
 ::: columns
 ::: column
-Here is the accompanying text for the KO analysis.  
 
-- Interpretation
-- Observations
-- Summary
+- Annotation of R. Intestinalis genome enables matching of Gene ids with KO terms
+- Mapping of KO terms to pathways enables the calculation of pathways percentages across clusters
+- As expected, some pathways are represented across all clusters, whereas others are limited to 1 or 2 clusters.
 :::
 
 ::: column
