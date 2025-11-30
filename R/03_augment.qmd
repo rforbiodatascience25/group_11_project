@@ -15,3 +15,12 @@ ri_expression_data |>
               values_from = expression) |> 
   write_csv("../data/03_expression_augment_data.csv")
 ```
+
+```{r}
+ri_annotation |>
+  select(gene_ids, ko) |>
+  mutate(ko = ifelse(ko == "-", NA, ko)) |>
+  drop_na(ko) |>
+  separate_rows(ko, sep = ",") |>
+  write_csv("../data/03_ri_annotation_augment_data.csv")
+```
