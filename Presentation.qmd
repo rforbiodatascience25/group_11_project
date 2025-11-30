@@ -19,18 +19,22 @@ link to how to implement different things:
 
 <https://quarto.org/docs/presentations/revealjs/>
 
-## Workflow
+## Workflow/data source
 
 ```{r}
 2+2
 
 ```
 
+## data cleaning and augmentation
+
 ## analysis results: co-expression
 
 ![](results/CoExpression.png)
 
 ## clusters
+
+![](results/clusters.png)
 
 ## top KO codes per cluster
 
@@ -39,5 +43,11 @@ link to how to implement different things:
 ## differential expression
 
 ## fermentation
+
+![](results/growthCurve.png)
+
+## full fermentation
+
+![](results/fullGrowthCurve.png)
 
 ## conclusion
