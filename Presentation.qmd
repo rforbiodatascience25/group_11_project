@@ -29,3 +29,15 @@ link to how to implement different things:
 ## analysis results: co-expression
 
 ![](results/CoExpression.png)
+
+## clusters
+
+## top KO codes per cluster
+
+![](results/topKOcodes.png)
+
+## differential expression
+
+## fermentation
+
+## conclusion
