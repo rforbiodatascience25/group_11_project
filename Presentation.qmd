@@ -30,15 +30,51 @@ link to how to implement different things:
 
 ## analysis results: co-expression
 
-![](results/CoExpression.png)
+::: columns
+::: column
+Here is the accompanying text for the co-expression analysis.  
+
+- Interpretation
+- Observations
+- Summary
+:::
+
+::: column
+![](results/CoExpression.png){width=100%}
+:::
+:::
 
 ## clusters
 
-![](results/clusters.png)
+::: columns
+::: column
+Here is the accompanying text for the clusters analysis.  
+
+- Interpretation
+- Observations
+- Summary
+:::
+
+::: column
+![](results/clusters.png){width=100%}
+:::
+:::
 
 ## top KO codes per cluster
 
-![](results/topKOcodes.png)
+::: columns
+::: column
+Here is the accompanying text for the KO analysis.  
+
+- Interpretation
+- Observations
+- Summary
+:::
+
+::: column
+![](results/topKOcodes.png){width=100%}
+:::
+:::
 
 ## differential expression
 
