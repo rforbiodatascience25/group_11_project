@@ -1,0 +1,43 @@
+---
+title: "Presentation"
+format: 
+  revealjs:
+    embed-resources: true
+editor: visual
+---
+
+## Introduction to subject
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+link to how to implement different things:
+
+<https://quarto.org/docs/presentations/revealjs/>
+
+## Workflow
+
+```{r}
+2+2
+
+```
+
+## analysis results: co-expression
+
+![](results/CoExpression.png)
+
+## clusters
+
+## top KO codes per cluster
+
+![](results/topKOcodes.png)
+
+## differential expression
+
+## fermentation
+
+## conclusion

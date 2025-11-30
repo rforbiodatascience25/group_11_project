@@ -111,6 +111,7 @@ fviz_cluster(
   data = corr_matrix_48,
   labelsize = 0
 )
+ggsave("../results/clusters.png")
 
 ```
 
@@ -178,6 +179,7 @@ df_with_pathways_4 <- cluster_kos %>%
     dplyr::left_join(ko_pathway_df, by = "ko")
 
 
+ggsave("../results/topKOcodes.png")
 
 ```
 
