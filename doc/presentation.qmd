@@ -17,10 +17,10 @@ A combination of targeted metabolomics and RNA-seq showed that the slow growth m
 ## Data overview {.smaller}
 
 ```{r}
-ri_metadata<- read.csv("../_raw/ri_metadata.csv")
-ri_expression_data <- read.csv("../_raw/ri_expression_data.csv")
-ri_annotation <- read.csv("../_raw/ri_annotation.csv")
-ri_fermentation_data <- read.csv("../_raw/ri_fermentation_data.csv")
+ri_metadata<- read.csv("../_raw/01_metadata_data_load.csv")
+ri_expression_data <- read.csv("../_raw/01_expression_data_load.csv")
+ri_annotation <- read.csv("../_raw/01_annotation_data_load.csv")
+ri_fermentation_data <- read.csv("../_raw/01_fermentation_data_load.csv")
 ```
 
 ::: incremental
@@ -79,6 +79,8 @@ ri_expression_data |>
               values_from = expression) |> 
   write_csv("../data/02_data_clean.csv")
 ```
+
+## Analysis Results: Co-Expression
 
 ::::: columns
 ::: column
