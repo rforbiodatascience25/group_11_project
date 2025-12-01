@@ -7,5 +7,5 @@
 
 # Link to presentation
 
-https://raw.githack.com/rforbiodatascience25/group_11_project/main/doc/Presentation.html
+https://raw.githack.com/rforbiodatascience25/group_11_project/main/doc/presentation.html
 
