@@ -122,8 +122,6 @@ ri_expression_data |>
 :::
 :::::
 
-## Differential Expression
-
 ## Expression
 
 ![](../results/volcano.png)
