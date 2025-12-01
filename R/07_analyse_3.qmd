@@ -79,63 +79,63 @@ df_glucose <- summary_glucose |> pivot_longer(cols = everything(),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = glu_mm, values_from = value) |> 
-  mutate(group = "glu_mm")
+  mutate(group = "Glucose")
 
 df_pyruvate <- summary_pyruvate |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "pyr_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = pyr_mm, values_from = value) |> 
-  mutate(group = "pyr_mm")
+  mutate(group = "Pyruvate")
 
 df_lactate <- summary_lactate |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "lac_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = lac_mm, values_from = value) |> 
-  mutate(group = "lac_mm")
+  mutate(group = "Lactate")
 
 df_formate <- summary_formate |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "for_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = for_mm, values_from = value) |> 
-  mutate(group = "for_mm")
+  mutate(group = "Formate")
 
 df_acetate <- summary_acetate |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "ace_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = ace_mm, values_from = value) |> 
-  mutate(group = "ace_mm")
+  mutate(group = "Acetate")
 
 df_butyrate <- summary_butyrate |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "but_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = but_mm, values_from = value) |> 
-  mutate(group = "but_mm")
+  mutate(group = "Butyrate")
 
 df_ph <- summary_ph |> pivot_longer(cols = everything(),
                                   names_to = c("Hours", "ph_mm"),
                                   names_sep = "_",
                                   values_to = "value") |> 
   pivot_wider(names_from = ph_mm, values_from = value) |> 
-  mutate(group = "ph_mm")
+  mutate(group = "pH") |> 
+  mutate(mean = (mean - 5) * 6)
 
 plot_mm_df <- bind_rows(df_glucose, df_pyruvate, df_lactate, df_formate, df_acetate, df_butyrate, df_ph) |> 
   mutate(Hours = factor(Hours, levels = unique(Hours)))
 
 ggplot(plot_mm_df, aes(x = Hours, y = mean, group = group, linetype = group, color = group))+
-  geom_line()+
-  geom_point()+
+  geom_line(size = 1)+
+  geom_point(size = 2)+
   scale_y_continuous(
     name = "Concentration (mM)",
     limits = c(0,12),
-    sec.axis = sec_axis(~ ., name = "pH", breaks = seq(5,7,0.5))
+    sec.axis = sec_axis(~ (. / 6) + 5, name = "pH", breaks = seq(5,7,0.5))
   )+
   labs(title = "Mean Growth Curve for RI", x = "Hours", y = "mM", 
        color = "Group", linetype = "Group")+
   theme_minimal()
-#Still needs some work, maybe scale the right axis, maybe not include it at all, although if we do scale it it would look prettier
 ```
