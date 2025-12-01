@@ -130,20 +130,24 @@ ri_expression_data |>
 
 :::::
 
-## Differential Expression
-
 ## Expression
 
 ![](../results/volcano.png)
 
-## Top Counts
+## Top Counts {.scrollable}
 
-![](../results/topcounts.png) \## Fermentation
+![](../results/topcounts.png)
 
+## Fermentation
+
+::::: columns
+::: {.column width="50%"}
 ![](../results/growthCurve.png)
+:::
 
-## Full Fermentation
-
+::: {.column width="50%"}
 ![](../results/fullGrowthCurve.png)
+:::
+:::::
 
 ## Conclusion

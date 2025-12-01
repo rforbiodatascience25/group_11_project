@@ -10,8 +10,26 @@ format: html
 ```{r}
 #| message: false
 #| warning: false
-aug_expression <- read_csv("../data/03_expression_data_augment.csv")
+ri_metadata <- read.csv("../_raw/01_metadata_data_load.csv")
+ri_expression_data <- read.csv("../_raw/01_expression_data_load.csv")
+ri_annotation <- read.csv("../_raw/01_annotation_data_load.csv")
+ri_fermentation_data <- read.csv("../_raw/01_fermentation_data_load.csv")
 ```
 
-The expression dataset consists of \`{r} ncol(aug_expression) -1\` samples, each analysing\
-\
+The data consists of 4 datasets:
+
+1\.
+
+A fermentation dataset containing `r nrow(ri_fermentation_data)` experiments with data the columns `r colnames(ri_fermentation_data)[3:length(ri_fermentation_data)]` (not including row names),
+
+2\.
+
+An RNA expression data containing recorded expression of `r nrow(ri_expression_data)` genes in `r ncol(ri_expression_data) -2` experiments.
+
+3\.
+
+An annotation dataset, containing annotations coupling internal gene ID's used in the RNA expression dataset to gene names , KO ID's, and COG ID's
+
+4\.
+
+A meta-data coupling RNA expression samples with the fermentation batches they were extracted from.
