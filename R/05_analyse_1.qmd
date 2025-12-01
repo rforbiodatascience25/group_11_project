@@ -134,13 +134,14 @@ volcano <- EnhancedVolcano(res,
   title = 'DESeq2 results',
   subtitle = 'Differential expression',
   caption = 'FC cutoff, 1.333; p-value cutoff, 10e-4',
-  legendPosition = "right",
+  legendPosition = "bottom",
   legendLabSize = 14,
   col = c('grey30', 'forestgreen', 'royalblue', 'red2'),
   colAlpha = 0.9,
   drawConnectors = TRUE,
   hline = c(10e-8),
   widthConnectors = 0.5)
+volcano
 ggsave("../results/volcano.png", plot = volcano, device = 'png')
 ```
 
