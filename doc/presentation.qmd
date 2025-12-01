@@ -18,11 +18,6 @@ editor: visual
 * **Metabolic Switch:** Metabolomics & RNA-seq confirm a **diauxic shift** toward consuming:
     - **Acetate**
     - **Lactate**
-
-### Gene Expression
-Consistent upregulation observed in:
-* **Sugar utilization pathways** (glycolysis, pyruvate utilization)
-* **Butyrate-producing pathways**
 :::
 
 ::: {.column width="40%"}
