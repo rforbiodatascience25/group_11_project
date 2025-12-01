@@ -14,11 +14,7 @@ A combination of targeted metabolomics and RNA-seq showed that the slow growth m
 
 *R. intestinalis* consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
 
-<<<<<<< HEAD
 ## Data overview {.smaller}
-=======
-## Workflow/Data Source
->>>>>>> 8a95f20b29e53f187a587a72458ededce1944b52
 
 ```{r}
 ri_metadata<- read.csv("../_raw/ri_metadata.csv")
@@ -27,7 +23,6 @@ ri_annotation <- read.csv("../_raw/ri_annotation.csv")
 ri_fermentation_data <- read.csv("../_raw/ri_fermentation_data.csv")
 ```
 
-<<<<<<< HEAD
 ::: incremental
 -   Fermentation
 
@@ -51,7 +46,7 @@ ri_fermentation_data <- read.csv("../_raw/ri_fermentation_data.csv")
     -   Coupling RNA expression samples with fermentation batches and time points
 :::
 
-## data cleaning and augmentation
+## Data Cleaning and Augmentation
 
 Removing empty time-points from fermentation dataset
 
@@ -85,12 +80,6 @@ ri_expression_data |>
   write_csv("../data/02_data_clean.csv")
 ```
 
-## analysis results: co-expression
-=======
-## Data Cleaning and Augmentation
-
-## Analysis Results: Co-Expression
->>>>>>> 8a95f20b29e53f187a587a72458ededce1944b52
 
 ::::: columns
 ::: column
