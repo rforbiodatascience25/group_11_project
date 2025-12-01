@@ -12,13 +12,14 @@ library(tidyr)
 library(dplyr)
 library(DESeq2)
 library(EnhancedVolcano)
+library(ggrepel)
 ```
 
 ## Co-Expression of Transcripts
 
 ```{r}
 #| message: false
-aug_exp <- read_csv("../data/03_expression_augment_data.csv")
+aug_exp <- read_csv("../data/03_expression_data_augment.csv")
 ```
 
 ```{r}
@@ -65,7 +66,7 @@ aug_exp |>
 ri_metadata_2 <- ri_metadata |>
   dplyr::rename(id = "GC.code")
 
-count_data_wide <- read_csv("../data/03_expression_augment_data.csv")
+count_data_wide <- read_csv("../data/03_expression_data_augment.csv")
 
 count_matrix <- as.matrix(count_data_wide[,-1])  # Remove first column (assuming it's gene names)
 storage.mode(count_matrix) <- "integer"
@@ -142,6 +143,61 @@ volcano <- EnhancedVolcano(res,
   hline = c(10e-8),
   widthConnectors = 0.5)
 volcano
+
+
+
+
+
+df <- as.data.frame(res)
+df$gene <- rownames(df)
+
+fc_cutoff <- 1.333
+p_cutoff <- 10e-4
+
+df <- df |>
+  mutate(category = case_when(
+    pvalue < p_cutoff & abs(log2FoldChange) > fc_cutoff ~ "Both",
+    pvalue < p_cutoff ~ "P-value",
+    abs(log2FoldChange) > fc_cutoff ~ "Log2 FC",
+    TRUE ~ "NS"
+  )) |>
+  mutate(category = factor(category, levels = c("NS", "Log2 FC", "P-value", "Both")))
+
+ggplot(df, aes(x = log2FoldChange, y = -log10(pvalue))) +
+  geom_point(aes(color = category), alpha = 0.9, size = 1.5) +
+  scale_color_manual(values = c("NS" = "grey30", 
+                                "Log2 FC" = "forestgreen", 
+                                "P-value" = "royalblue", 
+                                "Both" = "red2")) +
+  geom_vline(xintercept = c(-fc_cutoff, fc_cutoff), linetype = "dashed", color = "black", alpha = 0.5) +
+  geom_hline(yintercept = -log10(p_cutoff), linetype = "dashed", color = "black", alpha = 0.5) +
+  geom_hline(yintercept = -log10(10e-8), linetype = "dotted", color = "black") +
+  geom_text_repel(
+    data = subset(df, category == "Both"),
+    aes(label = gene),
+    size = 2.5,
+    min.segment.length = 0, 
+    segment.size = 0.5
+  ) +
+  
+  xlim(-5.5, 5.5) +
+  ylim(0, -log10(10e-12)) +
+  labs(
+    title = "DESeq2 results",
+    subtitle = "Differential expression",
+    caption = "FC cutoff, 1.333; p-value cutoff, 10e-4",
+    x = "log2FoldChange",
+    y = "-Log10 P-value"
+  ) +
+  
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 14)
+  )
+
+
 ggsave("../results/volcano.png", plot = volcano, device = 'png')
 ```
 
