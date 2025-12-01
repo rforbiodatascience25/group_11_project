@@ -1,16 +1,22 @@
 ---
 title: "00_all"
-format: html
+format:
+  html:
+    self-contained: true
+execute:
+  echo: true
 ---
 
 # Run all R documents
 
 ```{r}
-source("01_load.qmd")
-source("02_clean.qmd")
-source("03_augment.qmd")
-source("04_describe.qmd")
-source("05_analyse_1.qmd")
-source("06_analyse_2.qmd")
-source("07_analyse_3.qmd")
+library(knitr)
+
+knitr::knit_child("01_load.qmd")
+knitr::knit_child("02_clean.qmd")
+knitr::knit_child("03_augment.qmd")
+knitr::knit_child("04_describe.qmd")
+knitr::knit_child("05_analyse_1.qmd")
+knitr::knit_child("06_analyse_2.qmd")
+knitr::knit_child("07_analyse_3.qmd")
 ```
