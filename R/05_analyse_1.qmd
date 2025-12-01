@@ -68,37 +68,36 @@ ri_metadata_2 <- ri_metadata |>
 
 count_data_wide <- read_csv("../data/03_expression_data_augment.csv")
 
-count_matrix <- as.matrix(count_data_wide[,-1])  # Remove first column (assuming it's gene names)
+count_matrix <- as.matrix(count_data_wide[,-1])  
 storage.mode(count_matrix) <- "integer"
-rownames(count_matrix) <- count_data_wide$X      # Set row names from first column
-colnames(count_matrix) <- colnames(count_data_wide)[-1]  # Column names should be sample IDs
+rownames(count_matrix) <- count_data_wide$X
+colnames(count_matrix) <- colnames(count_data_wide)[-1]
 
-# 3. Verify sample matching
 samples <- colnames(count_matrix)
 ri_metadata_filtered <- ri_metadata_2[ri_metadata_2$id %in% samples, ]
 
 # Set row names of metadata to match column names of count matrix
 rownames(ri_metadata_filtered) <- ri_metadata_filtered$id
 
-# 4. Check for mismatches
+# Check mismatches
 missing_in_metadata <- setdiff(samples, rownames(ri_metadata_filtered))
 missing_in_counts <- setdiff(rownames(ri_metadata_filtered), samples)
 
 print(paste("Samples in counts but not in metadata:", paste(missing_in_metadata, collapse=", ")))
 print(paste("Samples in metadata but not in counts:", paste(missing_in_counts, collapse=", ")))
 
-# 5. Ensure perfect matching by reordering and subsetting
+# Ensure perfect matching by reordering and subsetting
 common_samples <- intersect(samples, rownames(ri_metadata_filtered))
 count_matrix <- count_matrix[, common_samples, drop=FALSE]
 ri_metadata_filtered <- ri_metadata_filtered[common_samples, , drop=FALSE]
 
 ri_metadata_filtered$Time <- factor(ri_metadata_filtered$Time)
 
-# 6. Verify dimensions match
+# Verify dimensions match
 print(paste("Count matrix dimensions:", paste(dim(count_matrix), collapse=" x ")))
 print(paste("Metadata dimensions:", paste(dim(ri_metadata_filtered), collapse=" x ")))
 
-# 7. Create DESeqDataSet
+# Create DESeqDataSet
 dds <- DESeqDataSetFromMatrix(countData = count_matrix, 
                               colData = ri_metadata_filtered, 
                               design = ~ Time)
@@ -143,11 +142,11 @@ volcano <- EnhancedVolcano(res,
   hline = c(10e-8),
   widthConnectors = 0.5)
 volcano
+```
 
+### Volcano Plot (no external packages)
 
-
-
-
+```{r}
 df <- as.data.frame(res)
 df$gene <- rownames(df)
 
@@ -215,15 +214,15 @@ top_genes <- rownames(res12)[1:6]
 norm_counts <- counts(dds, normalized=TRUE)
 top_counts <- norm_counts[top_genes, ]
 
-top_counts_df <- as.data.frame(top_counts) %>%
-  rownames_to_column(var="Gene") %>%
+top_counts_df <- as.data.frame(top_counts) |>
+  rownames_to_column(var="Gene") |>
   pivot_longer(-Gene, names_to="Sample", values_to="Expression")
 
-sample_info <- as.data.frame(colData(dds)) %>%
-  select(Time) %>%
+sample_info <- as.data.frame(colData(dds)) |>
+  select(Time) |>
   rownames_to_column(var="Sample")
 
-top_counts_df <- top_counts_df %>%
+top_counts_df <- top_counts_df |>
   left_join(sample_info, by="Sample")
 
 top_counts <- ggplot(top_counts_df, aes(x=Time, y=Expression, fill=Time)) +

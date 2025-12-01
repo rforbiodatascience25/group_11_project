@@ -120,38 +120,36 @@ ri_expression_data |>
 
 ## K-Means Identifies 3 Distinct Clusters
 
-::::: {.columns .v-center-container}
-
-::: {.column width="40%"}
-* **Methodology:** Applied K-means clustering to the correlation matrix.
-* **Observation:** Genes show clear separation in 2D PCA space.
+:::::: {.columns .v-center-container}
+:::: {.column width="40%"}
+-   **Methodology:** Applied K-means clustering to the correlation matrix.
+-   **Observation:** Genes show clear separation in 2D PCA space.
 
 ::: {.callout-note appearance="simple"}
 **Note:** The cutoff for 3 clusters was selected for regulation validation purposes.
 :::
-:::
+::::
 
 ::: {.column width="60%"}
 ![](../results/clusters.png){fig-align="center" width="100%"}
+
 <center><small>Figure 1: PCA Projection of Gene Clusters</small></center>
 :::
-
-:::::
+::::::
 
 ## Pathway Enrichment Reveals Distinct Cluster Functions
 
 ::::: {.columns .v-center-container}
-
 ::: {.column width="40%"}
 ### Observations
-* Major pathways (top bars) are shared across all three clusters.
-* Certain pathways are exclusive to Cluster 1 or 2 (e.g., lower yellow/green bars).
+
+-   Major pathways (top bars) are shared across all three clusters.
+-   Certain pathways are exclusive to Cluster 1 or 2 (e.g., lower yellow/green bars).
 :::
 
 ::: {.column width="60%"}
 ![](../results/topKOcodes.png){fig-align="center" width="100%"}
 :::
-
 :::::
 
 ## Differential Expression Analysis {.smaller}
@@ -161,7 +159,9 @@ ri_expression_data |>
 ::: {.column width="40%"}
 * This volcano plot visualizes the transcriptional changes that *R. intestinalis* undergoes during the transition.
 
-* The highly upregulated genes likely correspond to the **alternative metabolic pathways** required for survival after glucose depletion.
+* The highly upregulated genes reflect the shift toward alternative energy sources needed after glucose depletion, including pathways for acetate and lactate consumption.
+
+* The highly downregulated genes correspond to pathways that are no longer prioritized once glucose is exhausted, particularly those involved in glucose and pyruvate utilization.
 :::
 
 ::: {.column width="60%"}
@@ -170,9 +170,23 @@ ri_expression_data |>
 
 :::::
 
-## Top Counts {.scrollable}
+## Dynamic Regulation of Key Genes {.smaller}
 
-![](../results/topcounts.png)
+::::: {.columns .v-center-container}
+
+::: {.column width="40%"}
+* **Visualizing Change:** These 6 genes represent the most significant expression changes identified in the RNA-seq analysis across time points (4h, 12h, 48h).
+* **Distinct Phases:**
+    * **Early Expression (Red/Green):** Genes essential for initial rapid growth.
+    * **Late Shifts (Blue):** Genes that spike at 48h likely drive the **diauxic shift** and survival maintenance.
+
+:::
+
+::: {.column width="60%"}
+![](../results/topcounts.png){width="100%" fig-align="center"}
+:::
+
+:::::
 
 ## *R. intestinalis* Exhibits Metabolic Resilience {.smaller}
 
@@ -203,11 +217,3 @@ Butyrate continues rising as glucose is exhausted.
 -   **2. Metabolic Flexibility**
     -   The **diauxic shift** to acetate and glucose consumption is supported, both by RNA-seq and fermentation data.
     -   This metabolic switch enables a **"slow-growth" maintenance mode**, allowing *R. intestinalis* to maintain cell viability and continue producing butyrate.
-:::
-
-::: {.fragment .fade-up}
-<div style="margin-top: 40px; padding: 20px; background-color: #f3f4f6; border-left: 6px solid #4a78d4; border-radius: 4px;">
-**Key Takeaway:**
-*R. intestinalis* possesses sophisticated regulatory machinery that prioritizes **resilience**, ensuring its persistence as a keystone species in the competitive gut environment.
-</div>
-:::
