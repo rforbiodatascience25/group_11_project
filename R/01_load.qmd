@@ -4,6 +4,17 @@ format: html
 editor: visual
 ---
 
+## Create folders to store data ("\_raw/", "data/")
+
+```{r}
+
+library(purrr)
+
+folders <- c("../_raw/", "../data/")
+folders |>
+  walk(~ if (!dir.exists(.x)) dir.create(.x, recursive = TRUE))
+```
+
 ## Data Retrieval from Online GitHub Repository
 
 ```{r}
