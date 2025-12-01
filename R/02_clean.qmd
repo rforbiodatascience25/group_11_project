@@ -8,7 +8,9 @@ format:
 # clean data
 
 ```{r}
+#| message: false
 library(tidyverse)
+library(knitr)
 ```
 
 ## join expression and meta data
@@ -27,6 +29,8 @@ ri_expression_data |>
   pivot_wider(names_from = sample,
               values_from = expression) |> 
   write_csv("../data/02_expression_data_clean.csv")
+
+knitr::kable(head(ri_expression_data))
 ```
 
 ## Clean annotation data
@@ -40,6 +44,8 @@ ri_annotation |>
   ) |>
   drop_na(ko) |>
   write_csv("../data/02_annotation_data_clean.csv")
+
+knitr::kable(head(ri_annotation))
 ```
 
 ## Clean fermentation data
@@ -51,4 +57,6 @@ ri_fermentation |>
   select( "Rowname" | (starts_with("T") & ends_with("h")) ) |>
   select(where(~!all(is.na(.x)) ) ) |>
   write_csv("../data/02_fermentation_data_clean.csv")
+
+knitr::kable(head(ri_fermentation))
 ```
