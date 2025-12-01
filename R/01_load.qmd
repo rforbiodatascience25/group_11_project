@@ -26,4 +26,8 @@ ri_annotation = read.csv(url(url_ri_annotation))
 
 ri_fermentation_data = read.csv(url(url_ri_fermentation_data))
 
+write.csv(ri_metadata,"../_raw/ri_metadata.csv")
+write.csv(ri_expression_data,"../_raw/ri_expression_data.csv")
+write.csv(ri_annotation,"../_raw/ri_annotation.csv")
+write.csv(ri_fermentation_data,"../_raw/ri_fermentation_data.csv")
 ```

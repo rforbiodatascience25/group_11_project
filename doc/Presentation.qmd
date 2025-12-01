@@ -6,15 +6,19 @@ format:
 editor: visual
 ---
 
-## Introduction to subject
+## Introduction to Subject
 
-R. intestinalis survives post-glucose (and post-mucin-degradation products) depletion by entering a slow-growth mode.
+*R. intestinalis* survives post-glucose (and post-mucin-degradation products) depletion by entering a slow-growth mode.
 
-A combination of targeted metabolomics and RNA-seq showed that the slow growth mode of R. intestinalis represents a diauxic shift towards acetate and lactate consumption (both leading to butyrate production).
+A combination of targeted metabolomics and RNA-seq showed that the slow growth mode of *R. intestinalis* represents a diauxic shift towards acetate and lactate consumption (both leading to butyrate production).
 
-R. intestinalis consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
+*R. intestinalis* consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
 
+<<<<<<< HEAD
 ## Data overview {.smaller}
+=======
+## Workflow/Data Source
+>>>>>>> 8a95f20b29e53f187a587a72458ededce1944b52
 
 ```{r}
 ri_metadata<- read.csv("../_raw/ri_metadata.csv")
@@ -23,6 +27,7 @@ ri_annotation <- read.csv("../_raw/ri_annotation.csv")
 ri_fermentation_data <- read.csv("../_raw/ri_fermentation_data.csv")
 ```
 
+<<<<<<< HEAD
 ::: incremental
 -   Fermentation
 
@@ -81,11 +86,16 @@ ri_expression_data |>
 ```
 
 ## analysis results: co-expression
+=======
+## Data Cleaning and Augmentation
+
+## Analysis Results: Co-Expression
+>>>>>>> 8a95f20b29e53f187a587a72458ededce1944b52
 
 ::::: columns
 ::: column
 -   Input data was a total of 9 samples across 3 time conditions (with 3 replicates each)
--   Matrix reveals co-expression patterns in R. Intestinalis gene expression data
+-   Matrix reveals co-expression patterns in *R. intestinalis* gene expression data
 -   Co-regulated genes can potentially contribute to the same pathways
 :::
 
@@ -94,7 +104,7 @@ ri_expression_data |>
 :::
 :::::
 
-## analysis results: clustering
+## Analysis Results: Clustering
 
 ::::: columns
 ::: column
@@ -108,11 +118,11 @@ ri_expression_data |>
 :::
 :::::
 
-## top KO codes per cluster
+## Top KO Codes per Cluster
 
 ::::: columns
 ::: column
--   Annotation of R. Intestinalis genome enables matching of Gene ids with KO terms
+-   Annotation o*f R. intestinalis* genome enables matching of Gene ids with KO terms
 -   Mapping of KO terms to pathways enables the calculation of pathways percentages across clusters
 -   As expected, some pathways are represented across all clusters, whereas others are limited to 1 or 2 clusters.
 :::
@@ -122,14 +132,19 @@ ri_expression_data |>
 :::
 :::::
 
-## differential expression
+## Differential Expression
 
-## fermentation
+## Expression
+![](../results/volcano.png)
+
+## Top Counts
+![](../results/topcounts.png)
+## Fermentation
 
 ![](../results/growthCurve.png)
 
-## full fermentation
+## Full Fermentation
 
 ![](../results/fullGrowthCurve.png)
 
-## conclusion
+## Conclusion

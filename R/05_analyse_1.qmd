@@ -3,11 +3,21 @@ title: "05_analyse_1"
 format: html
 ---
 
-```{r}
-#| message: false
+# Analysis I
 
+```{r}
 library(tidyverse)
 library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(DESeq2)
+library(EnhancedVolcano)
+```
+
+## Co-Expression of Transcripts
+
+```{r}
+#| message: false
 aug_exp <- read_csv("../data/03_expression_augment_data.csv")
 ```
 
@@ -46,13 +56,11 @@ aug_exp |>
 
 ```
 
+## DESeq
 
-
+### Preparation
 
 ```{r}
-library(tidyr)
-library(dplyr)
-library(DESeq2)
 
 ri_metadata_2 <- ri_metadata |>
   dplyr::rename(id = "GC.code")
@@ -95,24 +103,25 @@ dds <- DESeqDataSetFromMatrix(countData = count_matrix,
                               design = ~ Time)
 
 ```
+### Computation
 
 ```{r}
+
+# Run DESeq
 dds <- DESeq(dds)
-```
-
-```{r}
 res <- results(dds)
-head(results(dds, tidy=TRUE))
-```
 
-```{r}
+# and show some of the results
+head(results(dds, tidy=TRUE))
 res <- res[order(res$padj),]
 head(res)
 ```
 
+### Volcano Plot
+
 ```{r}
-library(EnhancedVolcano)
-EnhancedVolcano(res,
+# Generate a Volcano Plot
+volcano <- EnhancedVolcano(res,
   lab = rownames(res),
   x = 'log2FoldChange',
   y = 'pvalue',
@@ -125,22 +134,20 @@ EnhancedVolcano(res,
   title = 'DESeq2 results',
   subtitle = 'Differential expression',
   caption = 'FC cutoff, 1.333; p-value cutoff, 10e-4',
-  legendPosition = "right",
+  legendPosition = "bottom",
   legendLabSize = 14,
   col = c('grey30', 'forestgreen', 'royalblue', 'red2'),
   colAlpha = 0.9,
   drawConnectors = TRUE,
   hline = c(10e-8),
   widthConnectors = 0.5)
+volcano
+ggsave("../results/volcano.png", plot = volcano, device = 'png')
 ```
 
-```{r}
-# Load required libraries
-library(DESeq2)
-library(ggplot2)
-library(dplyr)
-library(tidyr)
+### Top 6 Expressed Genes
 
+```{r}
 res12 <- results(dds, contrast=c("Time","12","4"))
 res48 <- results(dds, contrast=c("Time","48","4"))
 
@@ -163,12 +170,13 @@ sample_info <- as.data.frame(colData(dds)) %>%
 top_counts_df <- top_counts_df %>%
   left_join(sample_info, by="Sample")
 
-ggplot(top_counts_df, aes(x=Time, y=Expression, fill=Time)) +
+top_counts <- ggplot(top_counts_df, aes(x=Time, y=Expression, fill=Time)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~Gene, scales="free_y") +
   theme_minimal() +
   labs(title="Top 6 Differentially Expressed Genes Across Time Points",
        y="Normalized Expression")
 
-```
+ggsave("../results/topcounts.png", plot = top_counts, device = 'png')
 
+```
