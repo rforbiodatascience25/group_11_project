@@ -8,15 +8,35 @@ format:
 editor: visual
 ---
 
-## Introduction to Subject
+## *R. intestinalis* Adapts via Diauxic Shift
 
-*R. intestinalis* survives post-glucose (and post-mucin-degradation products) depletion by entering a slow-growth mode.
+::::: {.columns}
 
-A combination of targeted metabolomics and RNA-seq showed that the slow growth mode of *R. intestinalis* represents a diauxic shift towards acetate and lactate consumption (both leading to butyrate production).
+::: {.column width="60%"}
+### Mechanism of Survival
+* **Slow-Growth Mode:** *R. intestinalis* survives depletion of glucose and mucin products by drastically reducing growth rate.
+* **Metabolic Switch:** Metabolomics & RNA-seq confirm a **diauxic shift** toward consuming:
+    - **Acetate**
+    - **Lactate**
 
-*R. intestinalis* consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
+### Gene Expression
+Consistent upregulation observed in:
+* **Sugar utilization pathways** (glycolysis, pyruvate utilization)
+* **Butyrate-producing pathways**
+:::
 
-[Liu, B., Garza, D.R., Gonze, D. et al. Starvation responses impact interaction dynamics of human gut bacteria Bacteroides thetaiotaomicron and Roseburia intestinalis. ISME J 17, 1940–1952 (2023). <https://doi.org/10.1038/s41396-023-01501-1>]{style="font-size: 30%;"}
+::: {.column width="40%"}
+![](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/ismej/17/11/10.1038_s41396-023-01501-1/2/m_41396_2023_1501_fig1_html.jpeg?Expires=1766109298&Signature=ebtPbc~ey20WHF3j3xQO9reMh1rR64ZuSi-Ymts7uYraP8Vim54OMMh4AaRom-xwTEhQtw58LOh6vGoyG0ZWqQerzKEKIEWQ1EQ1we78pqxePO9peb7KxlMNFvvxKcgyD1xzES46ch0tZGluz83kA2lfJd-hJMXMoSJ8JUykiWMm~kHEJc8EgCpz7H6pXEjLleQvKLNSxxTtqnQ3VNIc8utOij15ydx6DW2j9oiVWKlqOYrrtFLv7bghejVX7uW4xHiuuq5gueug-wThPWHwYJsVEdIQmRlAmrxf-1fvmLjpYQsiH98qCk86-ufR4dG542PZ2MNPQY34RxtUE-G6Gw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA){width="100%" fig-align="center"}
+
+<div style="font-size: 0.55em; line-height: 1.2; margin-top: 1em; padding: 0.8em; border-left: 3px solid #4a78d4; background-color: #f8f9fa;">
+**Source:** Liu, B., Garza, D.R., Gonze, D. *et al.* (2023). <br>
+*Starvation responses impact interaction dynamics of human gut bacteria...* <br>
+**ISME Journal** 17. [DOI: 10.1038/...](https://doi.org/10.1038/s41396-023-01501-1)
+</div>
+:::
+
+:::::
+
 
 ## Data overview {.smaller}
 
@@ -134,28 +154,60 @@ ri_expression_data |>
 
 :::::
 
-## Expression
+## Differential Expression Analysis {.smaller}
 
-![](../results/volcano.png)
+::::: {.columns .v-center-container}
+
+::: {.column width="40%"}
+* This volcano plot visualizes the transcriptional changes that *R. intestinalis* undergoes during the transition.
+
+* The highly upregulated genes likely correspond to the **alternative metabolic pathways** required for survival after glucose depletion.
+:::
+
+::: {.column width="60%"}
+![](../results/volcano.png){width="100%" fig-align="center"}
+:::
+
+:::::
 
 ## Top Counts {.scrollable}
 
 ![](../results/topcounts.png)
 
-## Fermentation
+## *R. intestinalis* Exhibits Metabolic Resilience {.smaller}
 
-::::: columns
+::::: {.columns}
+
 ::: {.column width="50%"}
-![](../results/growthCurve.png)
+![](../results/growthCurve.png){height="400" fig-align="center"}
+
+**1. Survival Stability**
+Active cell counts remain stable even after nutrient depletion.
 :::
 
 ::: {.column width="50%"}
-![](../results/fullgrowthcurve.png)
+![](../results/fullgrowthcurve.png){height="400" fig-align="center"}
+
+**2. Fermentation Dynamics**
+Butyrate continues rising as glucose is exhausted.
 :::
+
 :::::
 
-:::{style="font-size: 70%;"}
-R. intestinalis' active cell count remains stable, even after the nutrients are depleted. This showcases this species' resilience. Butyrate concentration grows as glucose levels are dropping, which is expected, as butyrate is the fermentation product of R. intestinalis. The exact mechanism of its carbon uptake after glucose levels have dropped remains elusive
+## Conclusions
+
+::: {.incremental}
+-   **1. Functional Architecture**
+    -   Gene co-expression matrix analysis, K-means clustering, and enrichment analysis reveal a structured functional organization within the genome.
+
+-   **2. Metabolic Flexibility**
+    -   The **diauxic shift** to acetate and glucose consumption is supported, both by RNA-seq and fermentation data.
+    -   This metabolic switch enables a **"slow-growth" maintenance mode**, allowing *R. intestinalis* to maintain cell viability and continue producing butyrate.
 :::
 
-## Conclusion
+::: {.fragment .fade-up}
+<div style="margin-top: 40px; padding: 20px; background-color: #f3f4f6; border-left: 6px solid #4a78d4; border-radius: 4px;">
+**Key Takeaway:**
+*R. intestinalis* possesses sophisticated regulatory machinery that prioritizes **resilience**, ensuring its persistence as a keystone species in the competitive gut environment.
+</div>
+:::
