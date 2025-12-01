@@ -3,6 +3,8 @@ title: "06_analyse_2"
 format: html
 ---
 
+## Load data
+
 ```{r}
 #| message: false
 
@@ -14,11 +16,11 @@ library(KEGGREST)
 
 aug_exp <- read_csv("../data/03_expression_augment_data.csv")
 ri_annotation = read.csv("../data/03_ri_annotation_augment_data.csv")
-
 ```
 
-```{r}
+## Calculate Correlation Matrix and fill NAs with 0
 
+```{r}
 corr_matrix <- aug_exp |> 
   #slice_head(n = 20) |> 
   pivot_longer(cols = -X,
@@ -29,17 +31,13 @@ corr_matrix <- aug_exp |>
   column_to_rownames(var = "sample") |> 
   cor()
 
-```
-
-```{r}
-
 corr_matrix[is.na(corr_matrix)] <- 0
-
-kmeans.re <- kmeans(corr_matrix, centers = 3, nstart = 20)
-
 ```
 
+## Perform k-means clustering
+
 ```{r}
+kmeans.re <- kmeans(corr_matrix, centers = 3, nstart = 20)
 
 fviz_cluster(
   kmeans.re,
@@ -47,11 +45,11 @@ fviz_cluster(
   labelsize = 0
 )
 ggsave("../results/clusters.png")
-
 ```
 
-```{r}
+## Save clustering results to dataframe
 
+```{r}
 clusters_df <- data.frame(
   gene_ids = rownames(corr_matrix),
   cluster = kmeans.re$cluster,
@@ -61,11 +59,11 @@ clusters_df <- data.frame(
 cluster_kos <- clusters_df |>
   left_join(ri_annotation, by = "gene_ids") |>
   drop_na(ko)
-
 ```
 
-```{r}
+## Retrieve KEGG pathway for each KO term
 
+```{r}
 unique_ko_ids <- unique(gsub("ko:", "", ri_annotation$ko))
 
 ko_to_pathway_list <- list()
@@ -94,54 +92,57 @@ ko_pathway_df <-
             pathway_id = names(ko_to_pathway_list[[ko_id]]),
             pathway_name_raw = ko_to_pathway_list[[ko_id]]
         )
-    })) %>%
+    })) |>
     mutate(
         pathway_id = gsub("path:", "", pathway_id),
         # Remove the organism code (e.g., 'hsa00010' -> '00010')
         pathway_id_cleaned = sub("...0*", "", pathway_id) 
     )
 
-df_with_pathways <- cluster_kos %>%
-    dplyr::left_join(ko_pathway_df, by = "ko")
+df_with_pathways <- cluster_kos |>
+    left_join(ko_pathway_df, by = "ko")
 ```
 
+## Calculate percentages of each pathway across clusters
+
 ```{r}
-cluster_counts <- df_with_pathways %>%
-    group_by(cluster) %>%
+cluster_counts <- df_with_pathways |>
+    group_by(cluster) |>
     summarise(total_genes_in_cluster = n_distinct(gene_ids))
 
-pathway_counts <- df_with_pathways %>%
-    filter(!is.na(pathway_id)) %>%
-    group_by(cluster, pathway_name_raw) %>%
+pathway_counts <- df_with_pathways |>
+    filter(!is.na(pathway_id)) |>
+    group_by(cluster, pathway_name_raw) |>
     summarise(genes_in_pathway = n_distinct(gene_ids), .groups = 'drop')
 
-pathway_percentages <- pathway_counts %>%
-    left_join(cluster_counts, by = "cluster") %>%
+pathway_percentages <- pathway_counts |>
+    left_join(cluster_counts, by = "cluster") |>
     mutate(
         percentage = (genes_in_pathway / total_genes_in_cluster) * 100
-    ) %>%
+    ) |>
     arrange(cluster, desc(percentage))
 
 
-pathway_percentages_filtered <- pathway_percentages %>%
-    filter(grepl("^path:ko", pathway_name_raw)) %>%
+pathway_percentages_filtered <- pathway_percentages |>
+    filter(grepl("^path:ko", pathway_name_raw)) |>
     rename(pathway_id = pathway_name_raw)
 ```
 
-```{r}
+## Filter and plot the 4 pathways with highest percentage
 
-top_pathways_per_cluster <- pathway_percentages_filtered %>%
-    group_by(cluster) %>%
-    arrange(desc(percentage)) %>%
-    slice_head(n = 4) %>%
-    ungroup() %>%
+```{r}
+top_pathways_per_cluster <- pathway_percentages_filtered |>
+    group_by(cluster) |>
+    arrange(desc(percentage)) |>
+    slice_head(n = 4) |>
+    ungroup() |>
     mutate(cluster = as.factor(cluster))
 
-plot_top_4 <- top_pathways_per_cluster %>%
+plot_top_4 <- top_pathways_per_cluster |>
     mutate(
         pathway_id = factor(pathway_id),
         pathway_name_reordered = reorder(pathway_id, percentage)
-    ) %>%
+    ) |>
     ggplot(aes(x = pathway_name_reordered, y = percentage, fill = pathway_id)) +
     geom_col(show.legend = FALSE, width = 0.8, color = "white") +
     facet_wrap(~ cluster, scales = "free_x", nrow = 1) +
