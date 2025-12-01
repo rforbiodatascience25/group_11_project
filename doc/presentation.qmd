@@ -16,6 +16,8 @@ A combination of targeted metabolomics and RNA-seq showed that the slow growth m
 
 *R. intestinalis* consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
 
+[Liu, B., Garza, D.R., Gonze, D. et al. Starvation responses impact interaction dynamics of human gut bacteria Bacteroides thetaiotaomicron and Roseburia intestinalis. ISME J 17, 1940–1952 (2023). <https://doi.org/10.1038/s41396-023-01501-1>]{style="font-size: 30%;"}
+
 ## Data overview {.smaller}
 
 ```{r}
