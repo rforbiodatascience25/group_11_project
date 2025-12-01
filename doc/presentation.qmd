@@ -80,7 +80,6 @@ ri_expression_data |>
   write_csv("../data/02_data_clean.csv")
 ```
 
-
 ::::: columns
 ::: column
 -   Input data was a total of 9 samples across 3 time conditions (with 3 replicates each)
@@ -124,11 +123,12 @@ ri_expression_data |>
 ## Differential Expression
 
 ## Expression
+
 ![](../results/volcano.png)
 
 ## Top Counts
-![](../results/topcounts.png)
-## Fermentation
+
+![](../results/topcounts.png) \## Fermentation
 
 ![](../results/growthCurve.png)
 
