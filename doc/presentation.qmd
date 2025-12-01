@@ -1,5 +1,6 @@
 ---
-title: "Presentation"
+title: "Diauxic shift of *Roseburia intestinalis*"
+subtitle: "Enables slow growth after depletion of glucose"
 format: 
   revealjs:
     embed-resources: true
