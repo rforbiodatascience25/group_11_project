@@ -11,7 +11,6 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(DESeq2)
-library(EnhancedVolcano)
 library(ggrepel)
 ```
 
@@ -115,33 +114,6 @@ res <- results(dds)
 head(results(dds, tidy=TRUE))
 res <- res[order(res$padj),]
 head(res)
-```
-
-### Volcano Plot
-
-```{r}
-# Generate a Volcano Plot
-volcano <- EnhancedVolcano(res,
-  lab = rownames(res),
-  x = 'log2FoldChange',
-  y = 'pvalue',
-  pCutoff = 10e-4,
-  FCcutoff = 1.333,
-  xlim = c(-5.5, 5.5),
-  ylim = c(0, -log10(10e-12)),
-  pointSize = 1.5,
-  labSize = 2.5,
-  title = 'DESeq2 results',
-  subtitle = 'Differential expression',
-  caption = 'FC cutoff, 1.333; p-value cutoff, 10e-4',
-  legendPosition = "bottom",
-  legendLabSize = 14,
-  col = c('grey30', 'forestgreen', 'royalblue', 'red2'),
-  colAlpha = 0.9,
-  drawConnectors = TRUE,
-  hline = c(10e-8),
-  widthConnectors = 0.5)
-volcano
 ```
 
 ### Volcano Plot (no external packages)

@@ -7,7 +7,6 @@ editor: visual
 ## Create folders to store data ("\_raw/", "data/")
 
 ```{r}
-
 library(purrr)
 
 folders <- c("../_raw/", "../data/")
