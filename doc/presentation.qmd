@@ -80,11 +80,11 @@ ri_expression_data |>
   write_csv("../data/02_data_clean.csv")
 ```
 
-## Analysis Results: Co-Expression
+## Correlation Matrix from Gene Expression data
 
 ::::: columns
 ::: column
--   Input data was a total of 9 samples across 3 time conditions (with 3 replicates each)
+-   Input data was a total of 9 samples across 3 time conditions
 -   Matrix reveals co-expression patterns in *R. intestinalis* gene expression data
 -   Co-regulated genes can potentially contribute to the same pathways
 :::
@@ -94,32 +94,40 @@ ri_expression_data |>
 :::
 :::::
 
-## Analysis Results: Clustering
+## K-Means Identifies 3 Distinct Clusters
 
-::::: columns
-::: column
--   K-means clustering was applied to the correlation matrix from the previous slide
--   There is a clear separation of genes in the 2D space
--   Genes are grouped into 3 clusters (arbitrary cutoff for regulation validation)
+::::: {.columns .v-center-container}
+
+::: {.column width="40%"}
+* **Methodology:** Applied K-means clustering to the correlation matrix.
+* **Observation:** Genes show clear separation in 2D PCA space.
+
+::: {.callout-note appearance="simple"}
+**Note:** The cutoff for 3 clusters was selected for regulation validation purposes.
+:::
 :::
 
-::: column
-![](../results/clusters.png){width="100%"}
+::: {.column width="60%"}
+![](../results/clusters.png){fig-align="center" width="100%"}
+<center><small>Figure 1: PCA Projection of Gene Clusters</small></center>
 :::
+
 :::::
 
-## Top KO Codes per Cluster
+## Pathway Enrichment Reveals Distinct Cluster Functions
 
-::::: columns
-::: column
--   Annotation o*f R. intestinalis* genome enables matching of Gene ids with KO terms
--   Mapping of KO terms to pathways enables the calculation of pathways percentages across clusters
--   As expected, some pathways are represented across all clusters, whereas others are limited to 1 or 2 clusters.
+::::: {.columns .v-center-container}
+
+::: {.column width="40%"}
+### Observations
+* Major pathways (top bars) are shared across all three clusters.
+* Certain pathways are exclusive to Cluster 1 or 2 (e.g., lower yellow/green bars).
 :::
 
-::: column
-![](../results/topKOcodes.png){width="100%"}
+::: {.column width="60%"}
+![](../results/topKOcodes.png){fig-align="center" width="100%"}
 :::
+
 :::::
 
 ## Differential Expression
