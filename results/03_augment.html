@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>01_load</title>
+<title>03_augment</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3084,7 +3084,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">01_load</h1>
+<h1 class="title">03_augment</h1>
 </div>
 
 
@@ -3101,39 +3101,174 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="create-folders-to-store-data-_raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="create-folders-to-store-data-_raw-data">Create folders to store data (“_raw/”, “data/”)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>folders <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;../_raw/&quot;</span>, <span class="st">&quot;../data/&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>folders <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(<span class="sc">~</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(.x)) <span class="fu">dir.create</span>(.x, <span class="at">recursive =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="data-retrieval-from-online-github-repository" class="level2">
-<h2 class="anchored" data-anchor-id="data-retrieval-from-online-github-repository">Data Retrieval from Online GitHub Repository</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url_ri_metadata <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/01_RI_WC_mucin_metadata_all_RNA.csv&quot;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>url_ri_expression_data <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/01_RI_WC_mucin_counts_all_RNA.csv&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>url_ri_annotation <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/Roseburia_Intestalis/Roseburia_intestinalis_annotation_EGGNOGG.csv&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>url_ri_fermentation_data <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/Fermentation%20data.csv&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ri_metadata <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_metadata))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>ri_expression_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_expression_data))</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ri_annotation <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_annotation))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ri_fermentation_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_fermentation_data))</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_metadata,<span class="st">&quot;../_raw/01_metadata_data_load.csv&quot;</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_expression_data,<span class="st">&quot;../_raw/01_expression_data_load.csv&quot;</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_annotation,<span class="st">&quot;../_raw/01_annotation_data_load.csv&quot;</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_fermentation_data,<span class="st">&quot;../_raw/01_fermentation_data_load.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ri_metadata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../_raw/01_metadata_data_load.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ri_expression_clean <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/02_expression_data_clean.csv&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ri_expression_clean <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>X.x,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;sample&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;expression&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(ri_metadata, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;sample&quot;</span> <span class="ot">=</span> <span class="st">&quot;GC.code&quot;</span> )) <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Exp <span class="sc">==</span> <span class="st">&quot;RI_batch_WC&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X,expression,sample) <span class="sc">|&gt;</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> sample,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> expression) <span class="sc">|&gt;</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(<span class="st">&quot;../data/03_expression_data_augment.csv&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(ri_expression_clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">X.x</th>
+<th style="text-align: right;">GC124670</th>
+<th style="text-align: right;">GC124671</th>
+<th style="text-align: right;">GC124672</th>
+<th style="text-align: right;">GC124673</th>
+<th style="text-align: right;">GC124674</th>
+<th style="text-align: right;">GC124675</th>
+<th style="text-align: right;">GC124676</th>
+<th style="text-align: right;">GC124677</th>
+<th style="text-align: right;">GC124678</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00001</td>
+<td style="text-align: right;">9543.438</td>
+<td style="text-align: right;">6356.000</td>
+<td style="text-align: right;">3644.000</td>
+<td style="text-align: right;">7654.448</td>
+<td style="text-align: right;">6929.314</td>
+<td style="text-align: right;">3979.000</td>
+<td style="text-align: right;">3822.000</td>
+<td style="text-align: right;">3751.000</td>
+<td style="text-align: right;">7296.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00002</td>
+<td style="text-align: right;">8655.583</td>
+<td style="text-align: right;">6902.965</td>
+<td style="text-align: right;">4167.000</td>
+<td style="text-align: right;">6564.191</td>
+<td style="text-align: right;">5952.954</td>
+<td style="text-align: right;">5078.526</td>
+<td style="text-align: right;">3038.446</td>
+<td style="text-align: right;">3647.665</td>
+<td style="text-align: right;">5883.114</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00003</td>
+<td style="text-align: right;">1743.432</td>
+<td style="text-align: right;">1330.875</td>
+<td style="text-align: right;">773.674</td>
+<td style="text-align: right;">795.751</td>
+<td style="text-align: right;">740.185</td>
+<td style="text-align: right;">797.401</td>
+<td style="text-align: right;">649.441</td>
+<td style="text-align: right;">909.498</td>
+<td style="text-align: right;">1295.642</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00004</td>
+<td style="text-align: right;">11955.871</td>
+<td style="text-align: right;">9299.658</td>
+<td style="text-align: right;">6554.326</td>
+<td style="text-align: right;">7445.057</td>
+<td style="text-align: right;">7095.861</td>
+<td style="text-align: right;">4591.072</td>
+<td style="text-align: right;">6970.112</td>
+<td style="text-align: right;">6669.837</td>
+<td style="text-align: right;">11460.244</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00005</td>
+<td style="text-align: right;">15802.295</td>
+<td style="text-align: right;">10010.654</td>
+<td style="text-align: right;">6273.000</td>
+<td style="text-align: right;">12057.993</td>
+<td style="text-align: right;">11234.000</td>
+<td style="text-align: right;">6651.000</td>
+<td style="text-align: right;">9794.000</td>
+<td style="text-align: right;">10300.000</td>
+<td style="text-align: right;">14782.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00006</td>
+<td style="text-align: right;">25082.220</td>
+<td style="text-align: right;">15073.060</td>
+<td style="text-align: right;">10448.000</td>
+<td style="text-align: right;">18039.006</td>
+<td style="text-align: right;">16929.000</td>
+<td style="text-align: right;">11216.000</td>
+<td style="text-align: right;">22577.000</td>
+<td style="text-align: right;">22438.000</td>
+<td style="text-align: right;">33574.000</td>
+</tr>
+</tbody>
+</table>
 </div>
-</section>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ri_annotation_clean <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../data/02_annotation_data_clean.csv&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ri_annotation_clean <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(ko, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(<span class="st">&quot;../data/03_annotation_data_augment.csv&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(ri_annotation_clean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">gene_ids</th>
+<th style="text-align: left;">ko</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00001</td>
+<td style="text-align: left;">ko:K02313</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00002</td>
+<td style="text-align: left;">ko:K02338</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00003</td>
+<td style="text-align: left;">ko:K14761</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00004</td>
+<td style="text-align: left;">ko:K03629</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RIL182_00005</td>
+<td style="text-align: left;">ko:K02470</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RIL182_00006</td>
+<td style="text-align: left;">ko:K02469</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 </main>
 <!-- /main column -->

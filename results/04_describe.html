@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>01_load</title>
+<title>04_describe</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3084,7 +3084,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">01_load</h1>
+<h1 class="title">04_describe</h1>
 </div>
 
 
@@ -3101,38 +3101,26 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="create-folders-to-store-data-_raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="create-folders-to-store-data-_raw-data">Create folders to store data (“_raw/”, “data/”)</h2>
+<section id="describe-the-data" class="level1">
+<h1>Describe the data</h1>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">load data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>folders <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;../_raw/&quot;</span>, <span class="st">&quot;../data/&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>folders <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(<span class="sc">~</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(.x)) <span class="fu">dir.create</span>(.x, <span class="at">recursive =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ri_metadata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../_raw/01_metadata_data_load.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ri_expression_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../_raw/01_expression_data_load.csv&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ri_annotation <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../_raw/01_annotation_data_load.csv&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ri_fermentation_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../_raw/01_fermentation_data_load.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The data consists of 4 datasets:</p>
+<p>1.</p>
+<p>A fermentation dataset containing 888 experiments with data the columns Exp, Replicate, Mucin, Species.combi, T0h, T4h, T6h, T8h, T10h, T12h, T14h, T16h, T20h, T24h, T28h, T32h, T36h, T38h, T40h, T42h, T44h, T48h, T56h, T60h, T72h, T86h, T96h, T120h, T144h, T156h, T168h, T192h, T216h, T240h, T264h, T288h (not including row names),</p>
+<p>2.</p>
+<p>An RNA expression data containing recorded expression of 4262 genes in 45 experiments.</p>
+<p>3.</p>
+<p>An annotation dataset, containing annotations coupling internal gene ID’s used in the RNA expression dataset to gene names , KO ID’s, and COG ID’s</p>
+<p>4.</p>
+<p>A meta-data coupling RNA expression samples with the fermentation batches they were extracted from.</p>
 </section>
-<section id="data-retrieval-from-online-github-repository" class="level2">
-<h2 class="anchored" data-anchor-id="data-retrieval-from-online-github-repository">Data Retrieval from Online GitHub Repository</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url_ri_metadata <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/01_RI_WC_mucin_metadata_all_RNA.csv&quot;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>url_ri_expression_data <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/01_RI_WC_mucin_counts_all_RNA.csv&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>url_ri_annotation <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/Roseburia_Intestalis/Roseburia_intestinalis_annotation_EGGNOGG.csv&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>url_ri_fermentation_data <span class="ot">=</span> <span class="st">&quot;https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/Fermentation%20data.csv&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ri_metadata <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_metadata))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>ri_expression_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_expression_data))</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ri_annotation <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_annotation))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ri_fermentation_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(url_ri_fermentation_data))</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_metadata,<span class="st">&quot;../_raw/01_metadata_data_load.csv&quot;</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_expression_data,<span class="st">&quot;../_raw/01_expression_data_load.csv&quot;</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_annotation,<span class="st">&quot;../_raw/01_annotation_data_load.csv&quot;</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ri_fermentation_data,<span class="st">&quot;../_raw/01_fermentation_data_load.csv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 
 </main>
