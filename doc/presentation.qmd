@@ -150,8 +150,12 @@ ri_expression_data |>
 :::
 
 ::: {.column width="50%"}
-![](../results/fullGrowthCurve.png)
+![](../results/fullgrowthcurve.png)
 :::
 :::::
+
+:::{style="font-size: 70%;"}
+R. intestinalis' active cell count remains stable, even after the nutrients are depleted. This showcases this species' resilience. Butyrate concentration grows as glucose levels are dropping, which is expected, as butyrate is the fermentation product of R. intestinalis. The exact mechanism of its carbon uptake after glucose levels have dropped remains elusive
+:::
 
 ## Conclusion
