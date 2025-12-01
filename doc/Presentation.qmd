@@ -1,0 +1,78 @@
+---
+title: "Presentation"
+format: 
+  revealjs:
+    embed-resources: true
+editor: visual
+---
+
+## Introduction to subject
+
+R. intestinalis survives post-glucose (and post-mucin-degradation products) depletion by entering a slow-growth mode.
+
+A combination of targeted metabolomics and RNA-seq showed that the slow growth mode of R. intestinalis represents a diauxic shift towards acetate and lactate consumption (both leading to butyrate production).
+
+R. intestinalis consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
+
+## Workflow/data source
+
+```{r}
+2+2
+
+```
+
+## data cleaning and augmentation
+
+## analysis results: co-expression
+
+::::: columns
+::: column
+-   Input data was a total of 9 samples across 3 time conditions (with 3 replicates each)
+-   Matrix reveals co-expression patterns in R. Intestinalis gene expression data
+-   Co-regulated genes can potentially contribute to the same pathways
+:::
+
+::: column
+![](../results/CoExpression.png){width="100%"}
+:::
+:::::
+
+## analysis results: clustering
+
+::::: columns
+::: column
+-   K-means clustering was applied to the correlation matrix from the previous slide
+-   There is a clear separation of genes in the 2D space
+-   Genes are grouped into 3 clusters (arbitrary cutoff for regulation validation)
+:::
+
+::: column
+![](../results/clusters.png){width="100%"}
+:::
+:::::
+
+## top KO codes per cluster
+
+::::: columns
+::: column
+-   Annotation of R. Intestinalis genome enables matching of Gene ids with KO terms
+-   Mapping of KO terms to pathways enables the calculation of pathways percentages across clusters
+-   As expected, some pathways are represented across all clusters, whereas others are limited to 1 or 2 clusters.
+:::
+
+::: column
+![](../results/topKOcodes.png){width="100%"}
+:::
+:::::
+
+## differential expression
+
+## fermentation
+
+![](../results/growthCurve.png)
+
+## full fermentation
+
+![](../results/fullGrowthCurve.png)
+
+## conclusion
