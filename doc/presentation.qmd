@@ -4,6 +4,7 @@ subtitle: "Enables slow growth after depletion of glucose"
 format: 
   revealjs:
     embed-resources: true
+    slide-number: true
 editor: visual
 ---
 
