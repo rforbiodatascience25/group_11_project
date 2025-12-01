@@ -100,38 +100,36 @@ ri_expression_data |>
 
 ## K-Means Identifies 3 Distinct Clusters
 
-::::: {.columns .v-center-container}
-
-::: {.column width="40%"}
-* **Methodology:** Applied K-means clustering to the correlation matrix.
-* **Observation:** Genes show clear separation in 2D PCA space.
+:::::: {.columns .v-center-container}
+:::: {.column width="40%"}
+-   **Methodology:** Applied K-means clustering to the correlation matrix.
+-   **Observation:** Genes show clear separation in 2D PCA space.
 
 ::: {.callout-note appearance="simple"}
 **Note:** The cutoff for 3 clusters was selected for regulation validation purposes.
 :::
-:::
+::::
 
 ::: {.column width="60%"}
 ![](../results/clusters.png){fig-align="center" width="100%"}
+
 <center><small>Figure 1: PCA Projection of Gene Clusters</small></center>
 :::
-
-:::::
+::::::
 
 ## Pathway Enrichment Reveals Distinct Cluster Functions
 
 ::::: {.columns .v-center-container}
-
 ::: {.column width="40%"}
 ### Observations
-* Major pathways (top bars) are shared across all three clusters.
-* Certain pathways are exclusive to Cluster 1 or 2 (e.g., lower yellow/green bars).
+
+-   Major pathways (top bars) are shared across all three clusters.
+-   Certain pathways are exclusive to Cluster 1 or 2 (e.g., lower yellow/green bars).
 :::
 
 ::: {.column width="60%"}
 ![](../results/topKOcodes.png){fig-align="center" width="100%"}
 :::
-
 :::::
 
 ## Expression
@@ -154,7 +152,7 @@ ri_expression_data |>
 :::
 :::::
 
-:::{style="font-size: 70%;"}
+::: {style="font-size: 70%;"}
 R. intestinalis' active cell count remains stable, even after the nutrients are depleted. This showcases this species' resilience. Butyrate concentration grows as glucose levels are dropping, which is expected, as butyrate is the fermentation product of R. intestinalis. The exact mechanism of its carbon uptake after glucose levels have dropped remains elusive
 :::
 
