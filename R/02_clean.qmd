@@ -5,14 +5,11 @@ format: html
 
 # clean data
 
-## join expression and meta data
-
 ```{r}
 library(tidyverse)
-
-  
-  
 ```
+
+## join expression and meta data
 
 ```{r}
 ri_expression_data |> 
@@ -24,19 +21,27 @@ ri_expression_data |>
   select(X,expression,sample) |> 
   pivot_wider(names_from = sample,
               values_from = expression) |> 
-  write_csv("../data/02_data_clean.csv")
+  write_csv("../data/02_expression_data_clean.csv")
+```
 
+## Clean annotation data
 
+```{r}
+ri_clean <- ri_annotation |>
+  select(gene_ids, ko) |>
+  mutate(
+    ko = ifelse(ko == "-", NA, ko)
+  ) |>
+  drop_na(ko) |>
+  write_csv("../data/02_annotation_data_clean.csv")
 ```
 
 ## Clean fermentation data
 
 ```{r}
-
 ri_fermentation_data |>
   filter(Exp == "RI_batch_WC1") |>
   select( "Rowname" | (starts_with("T") & ends_with("h")) ) |>
   select(where(~!all(is.na(.x)) ) ) |>
   write_csv("../data/02_fermentation_data_clean.csv")
-
 ```

@@ -10,7 +10,7 @@ format: html
 ```{r}
 #| message: false
 #| warning: false
-aug_expression <- read_csv("../data/03_expression_augment_data.csv")
+aug_expression <- read_csv("../data/03_expression_data_augment.csv")
 ```
 
 The expression dataset consists of \`{r} ncol(aug_expression) -1\` samples, each analysing\

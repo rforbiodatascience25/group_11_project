@@ -8,7 +8,7 @@ format: html
 
 library(tidyverse)
 library(ggplot2)
-aug_exp <- read_csv("../data/03_expression_augment_data.csv")
+aug_exp <- read_csv("../data/03_expression_data_augment.csv")
 ```
 
 ```{r}
@@ -57,7 +57,7 @@ library(DESeq2)
 ri_metadata_2 <- ri_metadata |>
   dplyr::rename(id = "GC.code")
 
-count_data_wide <- read_csv("../data/03_expression_augment_data.csv")
+count_data_wide <- read_csv("../data/03_expression_data_augment.csv")
 
 count_matrix <- as.matrix(count_data_wide[,-1])  # Remove first column (assuming it's gene names)
 storage.mode(count_matrix) <- "integer"
