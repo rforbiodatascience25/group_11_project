@@ -1,6 +1,8 @@
 ---
 title: "05_analyse_1"
-format: html
+format:
+  html:
+    self-contained: true
 ---
 
 # Analysis I
@@ -19,6 +21,7 @@ library(ggrepel)
 ```{r}
 #| message: false
 aug_exp <- read_csv("../data/03_expression_data_augment.csv")
+ri_metadata <- read.csv("../_raw/01_metadata_data_load.csv")
 ```
 
 ```{r}
@@ -49,7 +52,7 @@ aug_exp |>
     mid = "white",
     high = "red"
   )+
-  theme(axis.text = element_blank(),
+  e(axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank())+
   labs(title = "Co-expression of transcripts")
@@ -161,8 +164,8 @@ ggplot(df, aes(x = log2FoldChange, y = -log10(pvalue))) +
     y = "-Log10 P-value"
   ) +
   
-  theme_minimal() +
-  theme(
+  e_minimal() +
+  e(
     legend.position = "bottom",
     legend.title = element_blank(),
     legend.text = element_text(size = 14)
@@ -200,7 +203,7 @@ top_counts_df <- top_counts_df |>
 top_counts <- ggplot(top_counts_df, aes(x=Time, y=Expression, fill=Time)) +
   geom_bar(stat="identity", position="dodge") +
   facet_wrap(~Gene, scales="free_y") +
-  theme_minimal() +
+  e_minimal() +
   labs(title="Top 6 Differentially Expressed Genes Across Time Points",
        y="Normalized Expression")
 
