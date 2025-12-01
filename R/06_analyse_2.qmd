@@ -15,14 +15,13 @@ library(cluster)
 library(KEGGREST)
 
 aug_exp <- read_csv("../data/03_expression_data_augment.csv")
-ri_annotation = read.csv("../data/03_annotation_data_augment.csv")
+ri_annotation <- read.csv("../data/03_annotation_data_augment.csv")
 ```
 
 ## Calculate Correlation Matrix and fill NAs with 0
 
 ```{r}
 corr_matrix <- aug_exp |> 
-  #slice_head(n = 20) |> 
   pivot_longer(cols = -X,
                names_to = "sample",
                values_to = "expression") |> 

@@ -4,7 +4,8 @@ format: html
 ---
 
 ```{r}
-ri_expression_data |> 
+ri_expression_clean <- read.csv("../data/02_expression_data_clean.csv")
+ri_expression_clean |> 
   pivot_longer(cols = -X,
                names_to = "sample",
                values_to = "expression") |> 
@@ -17,8 +18,8 @@ ri_expression_data |>
 ```
 
 ```{r}
-ri_annotation_clean = read.csv("../data/02_annotation_data_clean.csv")
-ri_annotation_augmented <- ri_annotation_clean |>
+ri_annotation_clean <- read.csv("../data/02_annotation_data_clean.csv")
+ri_annotation_clean |>
   separate_rows(ko, sep = ",") |>
   write_csv("../data/03_annotation_data_augment.csv")
 ```

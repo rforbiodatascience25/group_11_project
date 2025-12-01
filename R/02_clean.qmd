@@ -12,6 +12,7 @@ library(tidyverse)
 ## join expression and meta data
 
 ```{r}
+ri_expression_data <- read.csv("../_raw/01_expression_data_load.csv")
 ri_expression_data |> 
   pivot_longer(cols = -X,
                names_to = "sample",
@@ -27,7 +28,8 @@ ri_expression_data |>
 ## Clean annotation data
 
 ```{r}
-ri_clean <- ri_annotation |>
+ri_annotation <- read.csv("../_raw/01_annotation_data_load.csv")
+ri_annotation |>
   select(gene_ids, ko) |>
   mutate(
     ko = ifelse(ko == "-", NA, ko)
@@ -39,7 +41,8 @@ ri_clean <- ri_annotation |>
 ## Clean fermentation data
 
 ```{r}
-ri_fermentation_data |>
+ri_fermentation <- read.csv("../_raw/01_fermentation_data_load.csv")
+ri_fermentation |>
   filter(Exp == "RI_batch_WC1") |>
   select( "Rowname" | (starts_with("T") & ends_with("h")) ) |>
   select(where(~!all(is.na(.x)) ) ) |>

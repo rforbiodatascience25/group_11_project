@@ -17,17 +17,13 @@ url_ri_annotation = "https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_
 url_ri_fermentation_data = "https://raw.githubusercontent.com/msysbio/BTRI_mucin_study_data/refs/heads/main/Fermentation%20data.csv"
 
 
-
 ri_metadata = read.csv(url(url_ri_metadata))
-
 ri_expression_data = read.csv(url(url_ri_expression_data))
-
 ri_annotation = read.csv(url(url_ri_annotation))
-
 ri_fermentation_data = read.csv(url(url_ri_fermentation_data))
 
-write.csv(ri_metadata,"../_raw/ri_metadata.csv")
-write.csv(ri_expression_data,"../_raw/ri_expression_data.csv")
-write.csv(ri_annotation,"../_raw/ri_annotation.csv")
-write.csv(ri_fermentation_data,"../_raw/ri_fermentation_data.csv")
+write.csv(ri_metadata,"../_raw/01_metadata_data_load.csv")
+write.csv(ri_expression_data,"../_raw/01_expression_data_load.csv")
+write.csv(ri_annotation,"../_raw/01_annotation_data_load.csv")
+write.csv(ri_fermentation_data,"../_raw/01_fermentation_data_load.csv")
 ```
