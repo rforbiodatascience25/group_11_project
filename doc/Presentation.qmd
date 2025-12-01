@@ -14,14 +14,71 @@ A combination of targeted metabolomics and RNA-seq showed that the slow growth m
 
 R. intestinalis consistently increased the expression of genes involved in glycolysis, pyruvate utilization, mucin hydrolysis, galactose and mannose utilization, and the butyrate-producing process after depletion of glucose/pyruvate.
 
-## Workflow/data source
+## Data overview {.smaller}
 
 ```{r}
-2+2
-
+ri_metadata<- read.csv("../_raw/ri_metadata.csv")
+ri_expression_data <- read.csv("../_raw/ri_expression_data.csv")
+ri_annotation <- read.csv("../_raw/ri_annotation.csv")
+ri_fermentation_data <- read.csv("../_raw/ri_fermentation_data.csv")
 ```
 
+::: incremental
+-   Fermentation
+
+    -   containing `r nrow(ri_fermentation_data)` experiments with data:
+    -   `r colnames(ri_fermentation_data)[3:length(ri_fermentation_data)]`
+
+<!-- -->
+
+-   RNA expression data
+
+    -   containing recorded expression of `r nrow(ri_expression_data)` genes in `r ncol(ri_expression_data) -2` experiments
+
+-   Annotation for expression dataset
+
+    -   Coupling internal gene ID's to gene names , KO ID's, and COG ID's
+
+<!-- -->
+
+-   Meta-data for fermentation dataset
+
+    -   Coupling RNA expression samples with fermentation batches and time points
+:::
+
 ## data cleaning and augmentation
+
+Removing empty time-points from fermentation dataset
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2|3-4|5"
+ri_fermentation_data |>
+  filter(Exp == "RI_batch_WC1") |>
+  select( "Rowname", (starts_with("T") & ends_with("h")) ) |>
+  select(where(~!all(is.na(.x)) ) ) |>
+  write_csv("../data/02_fermentation_data_clean.csv")
+```
+
+Subsetting RNA expression to wild type R. intestinalis only
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "1|2-4|5|6|7-10"
+ri_expression_data |> 
+  pivot_longer(cols = -X,
+               
+               names_to = "sample",
+               values_to = "expression") |> 
+  inner_join(ri_metadata, by = c("sample" = "GC.code" )) |> 
+  filter(Exp == "RI_batch_WC") |> 
+  select(X,expression,sample) |> 
+  pivot_wider(names_from = sample,
+              values_from = expression) |> 
+  write_csv("../data/02_data_clean.csv")
+```
 
 ## analysis results: co-expression
 
